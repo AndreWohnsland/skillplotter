@@ -107,11 +107,11 @@ def plot_dia(ax, y_pos, val, filler, border, label, h1, h2, bg, bar, cfont):
         ticy.label.set_fontsize(36)
         ticy.label.set_color(cfont)
 
-    ax.spines['bottom'].set_color('w')
-    ax.spines['top'].set_color('w')
-    ax.spines['left'].set_color('w')
-    ax.spines['right'].set_color('w')
-    plt.setp(ax.get_xticklabels(), color="w", fontsize=8)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    # plt.setp(ax.get_xticklabels(), color="w", fontsize=8)
     ax.get_xaxis().set_visible(False)
         
 
