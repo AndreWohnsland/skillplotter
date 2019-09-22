@@ -29,16 +29,23 @@ color_font = (64/255, 64/255, 64/255)
 color_bg = (64/255, 64/255, 64/255) # 'grey'
 color_bar = (54/255, 125/255, 162/255) # 'tab:blue'
 
-def generate_pic(skills, heigh_b, heigh_s, color_font, color_bg, color_bar):
+def generate_pic(
+    skills,
+    heigh_b=0.7,
+    heigh_s=0.6,
+    color_font=(64/255, 64/255, 64/255),
+    color_bg=(64/255, 64/255, 64/255),
+    color_bar=(54/255, 125/255, 162/255)
+    ):
     """Plot and displays the given skill bar. Also saves it as svg  
     
     Args:
         skills (dict): Dictionary of skillnames and level of skills.
-        heigh_b (float): Percentage of the height of the background bar. Should be greater than the skill bar.
-        heigh_s (float): Percentage of the height of the skill bar. Should be lesser than the backgroud bar.
-        color_font (color): Color of the font color.
-        color_bg (color): Color of the font backgroundbar.
-        color_bar (color): Color of the font skillbar.
+        heigh_b (float): Percentage of the height of the background bar. Should be greater than the skill bar. Defaults to 0.7.
+        heigh_s (float): Percentage of the height of the skill bar. Should be lesser than the backgroud bar. Defaults to 0.6.
+        color_font (color): Color of the font color. Defaults to dark grey.
+        color_bg (color): Color of the font backgroundbar. Defaults to dark grey.
+        color_bar (color): Color of the font skillbar. Defaults to blue.
     """
     skillnames = [k for k, _ in skills.items()]
     myskill = [v for _, v in skills.items()]
@@ -67,8 +74,8 @@ def generate_pic(skills, heigh_b, heigh_s, color_font, color_bg, color_bar):
     plot_dia(ax2, y_pos2, val2, filler2, border2, label2, heigh_s, heigh_b, color_bg, color_bar, color_font)
     plt.tight_layout()
         
-    plt.show()
-    plt.savefig("skills.svg", format="svg")
+    plt.savefig("skills.svg", format="svg", transparent=True)
+    # plt.show()
 
 
 def plot_dia(ax, y_pos, val, filler, border, label, h1, h2, bg, bar, cfont):
