@@ -22,3 +22,7 @@ As long as you are using anaconda, matplotlib should be already included. Otherw
 Here you can see an example of the generated svg. Currently there are always two equal divided columns, in the future there will be the option to choose between one to three columns.
 
 ![skillist](https://github.com/AndreWohnsland/skillplotter/blob/master/skills.png "your skillist")
+
+## Usage
+
+Feel free to use and experiment with this. If you are using it for an publication or similar I'd be glad if you can quote this project.
