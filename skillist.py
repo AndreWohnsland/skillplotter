@@ -47,14 +47,21 @@ def generate_pic(
         color_bg (color): Color of the font backgroundbar. Defaults to dark grey.
         color_bar (color): Color of the font skillbar. Defaults to blue.
     """
+    # generates lists of the names and skills out of the dict
     skillnames = [k for k, _ in skills.items()]
     myskill = [v for _, v in skills.items()]
+    # also generates the fixex values for the background bars
     maxskill = [10.05 for x in range(len(skillnames))]
+    # and the fixed values for the front border
     border = [0.05 for x in range(len(skillnames))]
 
+    # gets the len, divides it into two parts
     l_s = len(skillnames)
     l_h = int(np.ceil(l_s / 2))
 
+    # generate thje diagram, splits the values into two lists to plot.
+    # this should be done in the future over one loop 
+    # the loop decides what to put when and how many columns
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20,l_h))
 
     val1, val2 = myskill[0:l_h], myskill[l_h:l_s]
@@ -67,9 +74,11 @@ def generate_pic(
         filler2.append(0)
         border2.append(0)
         
+    # gets y_positions (1 to n-1) for both, they are usually identical
     y_pos1 = np.arange(len(val1))
     y_pos2 = np.arange(len(val2))
 
+    # plot the diagrams and format the axis accordingly
     plot_dia(ax1, y_pos1, val1, filler1, border1, label1, heigh_s, heigh_b, color_bg, color_bar, color_font)
     plot_dia(ax2, y_pos2, val2, filler2, border2, label2, heigh_s, heigh_b, color_bg, color_bar, color_font)
     plt.tight_layout()
@@ -94,10 +103,16 @@ def plot_dia(ax, y_pos, val, filler, border, label, h1, h2, bg, bar, cfont):
         bar (color): Color of the Skillbar.
         cfont (color): Color of the font.
     """
+    # plots the skill label
     ax.barh(y_pos, val, tick_label=label, zorder=2, height=h1, color=bar)
+    # plots the background
     ax.barh(y_pos, filler, tick_label=label, zorder=1, height=h2, color=bg)
+    # plots the front border, alternatively in the first plot there could be 
+    # used the "left" keyword to shift it from zero the the border
     ax.barh(y_pos, border, tick_label=label, zorder=3, height=h2, color=bg)
+    # invert axis because last list element is on the top
     ax.invert_yaxis()
+    # remove all thicks, set fontcolor and size of y label
     for ticx in ax.xaxis.get_major_ticks():
         ticx.tick1line.set_visible(False)
         ticx.tick2line.set_visible(False)
@@ -107,6 +122,7 @@ def plot_dia(ax, y_pos, val, filler, border, label, h1, h2, bg, bar, cfont):
         ticy.label.set_fontsize(36)
         ticy.label.set_color(cfont)
 
+    # removes the border and the x-axis around the diagram
     ax.spines['bottom'].set_visible(False)
     ax.spines['top'].set_visible(False)
     ax.spines['left'].set_visible(False)
