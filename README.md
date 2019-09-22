@@ -4,7 +4,7 @@ This little script will help you visualize the skills of you for your CV, presen
 
 The process is quite simple and fast, you just need to generate a dict (`skills`) and map the level of your skill to each skill keyword. An example is already in the script. The skills range from zero (not good) to ten (very good). Additionally you can style the height of the background bar `height_b` and the height of the skill bar `height_s`, the color of the background bar `color_bg`, the color of the skill bar `color_bar` and the color of the names for your skills `color_font`.
 
-Alternatively you could also the driving function `generate_pic` from this script and use it with all the above values to generate your own visual list of skills within your script. 
+Alternatively you could also import the driving function `generate_pic` from this script and use it with all the above values to generate your own visual list of skills within your script. 
 
 ## Minimal Requirements
 
