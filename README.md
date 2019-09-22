@@ -25,4 +25,4 @@ Here you can see an example of the generated svg. Currently there are always two
 
 ## Usage
 
-Feel free to use and experiment with this. If you are using it for an publication or similar I'd be glad if you can quote this project.
+Feel free to use and experiment with this project. If you are using it for an publication or similar I'd be glad if you can quote this project.
