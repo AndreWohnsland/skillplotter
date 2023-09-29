@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "skill-plotter"
+version = "0.1.0"
+description = "CLI tool to generate a plot of your skills"
+authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "<3.13,>=3.9"
+matplotlib = "^3.8"
+typer = "^0.9.0"
+pandas = "^2.1.1"
+
+
+[tool.poetry.group.dev.dependencies]
+mkdocs = "^1.5.3"
+jupyterlab = "^4.0.6"
+mkdocs-material = "^9.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
