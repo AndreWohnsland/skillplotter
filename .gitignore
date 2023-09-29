@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 
 tmp*.*
+
+./skills.png
+./skills.svg
