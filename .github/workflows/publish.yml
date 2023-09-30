@@ -2,6 +2,10 @@ name: Build & publish to pipy
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    tags:
+      description: 'Test scenario tags'
+      required: false
 
 jobs:
   publish-service-client-package:
