@@ -6,6 +6,7 @@ import typer
 
 from .utils import version_callback
 from .preparator import DEFAULT_SKILL_FILE_NAME
+from .plotter import generate_skill_picture, BLUE, DARK_GRAY
 from . import preparator
 
 app = typer.Typer()
@@ -30,6 +31,16 @@ def main(
     ] = PictureTypes.SVG,
     save_name: Annotated[str, typer.Option("--file-name", "-n", help="Name of the output file")] = "skills",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+    columns: Annotated[int, typer.Option("--columns", "-c", help="Number of columns", min=1, max=10)] = 2,
+    bar_height: Annotated[float, typer.Option("--bar-height", help="Height of the bar", min=0, max=1)] = 0.6,
+    background_height: Annotated[
+        float, typer.Option("--bg-heigh", help="Height of the bars background", min=0, max=1)
+    ] = 0.7,
+    bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar", min=0, max=1)] = BLUE,
+    background_color: Annotated[
+        str, typer.Option("--bg-color", help="Color of the bars background", min=0, max=1)
+    ] = DARK_GRAY,
+    font_color: Annotated[str, typer.Option("--font-color", help="Color of the font", min=0, max=1)] = DARK_GRAY,
     version: Annotated[Optional[bool], typer.Option("--version", "-V", callback=version_callback)] = None,
 ):
     """
@@ -40,9 +51,13 @@ def main(
     if ctx.invoked_subcommand is not None:
         return
     typer.echo(f"Using <{skill_group}> skill group")
-    typer.echo(f"Plotting skills to {save_name}.{file_type.value}")
+    typer.echo(f"Plotting skills to {save_name}.{file_type}")
     data = preparator.read_file(skill_group)
     typer.echo(data)
+    generate_skill_picture(
+        data, columns, save_name, file_type, bar_height,
+        background_height, background_color, bar_color, font_color
+    )
 
 
 @app.command()
