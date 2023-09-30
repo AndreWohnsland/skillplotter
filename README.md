@@ -35,4 +35,4 @@ skillplotter x y z
 
 Here you can see an example of the generated svg. Currently there are always two equal divided columns, in the future there will be the option to choose between one to three columns.
 
-![skillist](docs/skills.png "your skillist")
+![skillist](docs/skills_example.png "your skillist")
