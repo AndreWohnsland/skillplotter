@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skill-plotter"
-version = "0.0.1"
+version = ""
 description = "CLI tool to generate a plot of your skills"
 authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
 license = "MIT"
