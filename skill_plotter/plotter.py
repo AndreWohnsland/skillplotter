@@ -108,7 +108,8 @@ def generate_skill_picture(
     fig, axes = plt.subplots(1, n_splits, figsize=(10 * n_splits, split_len))
 
     # will get an iterable error since when using only one column, axes is not a list
-    if not isinstance(axes, list):
+    # just put the Axes object into a list to fix this
+    if isinstance(axes, Axes):
         axes = [axes]
 
     for ax, skills in zip(axes, split_skills):
