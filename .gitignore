@@ -161,5 +161,4 @@ cython_debug/
 
 tmp*.*
 
-./skills.png
-./skills.svg
+skills.*
