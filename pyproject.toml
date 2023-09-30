@@ -6,6 +6,9 @@ authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
 
+[tool.poetry.scripts]
+skill-plotter = "skill_plotter.main:app"
+
 [tool.poetry.dependencies]
 python = "<3.13,>=3.9"
 matplotlib = "^3.8"
