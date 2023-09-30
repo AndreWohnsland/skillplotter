@@ -105,7 +105,7 @@ def generate_skill_picture(
     # generate the diagram, splits the values into two lists to plot.
     # this should be done in the future over one loop
     # the loop decides what to put when and how many columns
-    fig, axes = plt.subplots(1, n_splits, figsize=(10 * n_splits, split_len))
+    _, axes = plt.subplots(1, n_splits, figsize=(10 * n_splits, split_len))
 
     # will get an iterable error since when using only one column, axes is not a list
     # just put the Axes object into a list to fix this
