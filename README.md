@@ -22,6 +22,10 @@ skillplotter x y z
 ```
 <!-- TODO: Add command interface -->
 
+## Colors
+
+You can choose any colors given in the [matplotlib documentation](https://matplotlib.org/3.1.0/tutorials/colors/colors.html).
+
 ## Development
 
 ### Minimal Requirements
