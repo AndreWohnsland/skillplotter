@@ -22,4 +22,4 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PACKAGE_DIRECTORY: './skill_plotter/'
           PUBLISH_REGISTRY_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          PUBLISH_REGISTRY: 'https://test.pypi.org/simple/'
+          PUBLISH_REGISTRY: 'https://test.pypi.org/legacy/'
