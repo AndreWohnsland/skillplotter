@@ -17,6 +17,7 @@ jobs:
       - name: Publish PyPi package
         uses: code-specialist/pypi-poetry-publish@v1
         with:
+          POETRY_VERSION: '1.6.0'
           ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PACKAGE_DIRECTORY: './skill_plotter/'
           PUBLISH_REGISTRY_PASSWORD: ${{ secrets.PYPI_TOKEN }}
