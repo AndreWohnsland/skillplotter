@@ -10,7 +10,7 @@ The skill plotter package is available as a CLI command and can be installed via
 
 
 ```bash
-pip install skillplotter
+pip install skill-plotter
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ pip install skillplotter
 Just use the CLI command to run the plotter:
 
 ```bash
-skillplotter x y z
+skill-plotter --help
 ```
 <!-- TODO: Add command interface -->
 
