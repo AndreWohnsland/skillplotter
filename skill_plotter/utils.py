@@ -1,8 +1,7 @@
 """Module for utility functions and constants."""
 
 import typer
-
-__version__ = "0.1.0"
+from . import __version__
 
 
 def version_callback(value: bool):
