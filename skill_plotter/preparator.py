@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any
 import typer
 
 from .utils import success_print, failure_print, info_print
@@ -10,6 +11,7 @@ _app_dir = typer.get_app_dir(_APP_NAME)
 if not Path(_app_dir).exists():
     Path(_app_dir).mkdir(parents=True)
 DEFAULT_SKILL_FILE_NAME = "skills"
+_DEFAULT_CATEGORY = "default"
 
 
 def _get_target_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> Path:
@@ -17,7 +19,48 @@ def _get_target_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> Path:
     return Path(_app_dir) / f"{file_name}.json"
 
 
-def read_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> dict[str, float]:
+def split_dict_evenly(d: dict, n: int) -> list[dict]:
+    """Split a dictionary into n evenly sized chunks."""
+    items = list(d.items())
+    chunk_size = len(items) // n
+    remainder = len(items) % n
+    splitted = []
+    start = 0
+    for i in range(n):
+        end = start + chunk_size
+        if i < remainder:
+            end += 1
+        splitted.append(dict(items[start:end]))
+        start = end
+    # append empty element if it is not evenly splitted
+    max_len = len(splitted[0])
+    for i in splitted:
+        if len(i) < max_len:
+            i[''] = 0
+    return splitted
+
+
+def sort_skills_by_category(skills: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Sorts the given skills by category.
+    Returns a sorted dict without the categories"""
+    # skills are of struct {skill: {category: str, level: float}}
+    # the skills can have more attributes, but we are only interested in those both
+    # sort by category and then by level
+    # in addition also list the skills with default category first
+    return dict(
+        sorted(
+            skills.items(),
+            key=lambda x: (x[1]["category"] != _DEFAULT_CATEGORY, x[1]["category"], x[1]["level"])
+        )
+    )
+
+
+def reduce_data(data: dict[str, dict[str, Any]]) -> dict[str, float]:
+    """Reduces the dict to only key and value"""
+    return {k: v["level"] for k, v in data.items()}
+
+
+def read_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> dict[str, dict[str, Any]]:
     """Reads the file from the given path and returns a dict.
     If the file path does not exist returns an empty dict.
     """
@@ -49,12 +92,17 @@ def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
         failure_print(f"Skill {skill} not found")
 
 
-def add_skill(skill: str, level: float, file_name: str = DEFAULT_SKILL_FILE_NAME):
+def add_skill(
+    skill: str,
+    level: float,
+    category: str = _DEFAULT_CATEGORY,
+    file_name: str = DEFAULT_SKILL_FILE_NAME
+):
     """Adds the skill to the skill list.
     If it already exists, the level will be overwritten.
     """
     data = read_file(file_name)
-    data[skill] = level
+    data[skill] = {"level": level, "category": category}
     write_file(data, file_name)
     success_print(f"Added skill {skill} with level {level}")
 

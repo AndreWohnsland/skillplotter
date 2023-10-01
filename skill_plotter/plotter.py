@@ -2,31 +2,12 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from typing import Union
 
+from .preparator import split_dict_evenly
+
 DARK_GRAY = "#404040"
 BLUE = "#367DA2"
 
 _COLOR = Union[str, tuple[float, float, float]]
-
-
-def split_dict_evenly(d: dict, n: int) -> list[dict]:
-    """Split a dictionary into n evenly sized chunks."""
-    items = list(d.items())
-    chunk_size = len(items) // n
-    remainder = len(items) % n
-    splitted = []
-    start = 0
-    for i in range(n):
-        end = start + chunk_size
-        if i < remainder:
-            end += 1
-        splitted.append(dict(items[start:end]))
-        start = end
-    # append empty element if it is not evenly splitted
-    max_len = len(splitted[0])
-    for i in splitted:
-        if len(i) < max_len:
-            i[''] = 0
-    return splitted
 
 
 def generate_diagram(
@@ -99,6 +80,19 @@ def generate_skill_picture(
     bar_color: _COLOR = DARK_GRAY,
     font_color: _COLOR = BLUE,
 ):
+    """Generate a bar diagram for the given skills.
+
+    Args:
+        skills (dict): Skills to plot.
+        n_splits (int): Number of columns to split the skills into.
+        save_name (str): Name of the file to save.
+        file_type (str): File type to save.
+        bar_height (float, optional): Height of the displayed bar. Defaults to 0.6.
+        background_height (float, optional): Height of the background of the bar. Defaults to 0.7.
+        background_color (_COLOR, optional): Color for the background. Defaults to DARK_GRAY.
+        bar_color (_COLOR, optional): Color for the bar. Defaults to DARK_GRAY.
+        font_color (_COLOR, optional): Color for the font. Defaults to BLUE.
+    """
     split_skills = split_dict_evenly(skills, n_splits)
     split_len = len(split_skills[0])
 
