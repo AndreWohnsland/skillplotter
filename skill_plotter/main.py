@@ -98,6 +98,16 @@ def list_groups():
 
 
 @app.command()
+def list_skills(
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+):
+    """
+    Show all skills of given group
+    """
+    preparator.list_all_skills(skill_group)
+
+
+@app.command()
 def delete_group(
     group: Annotated[str, typer.Argument(help="Name of group to delete")],
 ):

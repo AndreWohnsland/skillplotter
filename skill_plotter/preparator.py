@@ -118,6 +118,26 @@ def list_all_groups():
         typer.echo(f"- {file.stem}{suffix}")
 
 
+def list_all_skills(group: str):
+    """List all skills of the group"""
+    data = read_file(group)
+    if len(data) == 0:
+        failure_print(f"No skills found in group {group}")
+        return
+    data = sort_skills_by_category(data)
+    # create template to show data in a table, start at the end
+    # and use padding to align the values like a table
+    template = "|{:^20}|{:^10}|{:^20}|"
+    separator = "-" * 54
+    info_print(f"Skills of group {group}:")
+    typer.echo(separator)
+    typer.echo(template.format("Skill", "Level", "Category"))
+    typer.echo(separator)
+    for skill, value in data.items():
+        typer.echo(template.format(skill, value["level"], value["category"]))
+    typer.echo(separator)
+
+
 def delete_group(group: str):
     """Deletes the given group file (json) from the app dir
     Informs user if it was successful or not"""
