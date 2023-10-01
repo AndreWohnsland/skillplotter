@@ -32,6 +32,7 @@ def main(
     save_name: Annotated[str, typer.Option("--file-name", "-n", help="Name of the output file")] = "skills",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
     columns: Annotated[int, typer.Option("--columns", "-c", help="Number of columns", min=1, max=10)] = 2,
+    group_categories: Annotated[bool, typer.Option("--categories", help="Group by categories")] = False,
     bar_height: Annotated[float, typer.Option("--bar-height", help="Height of the bar", min=0, max=1)] = 0.6,
     background_height: Annotated[
         float, typer.Option("--bg-heigh", help="Height of the bars background", min=0, max=1)
@@ -53,9 +54,12 @@ def main(
     typer.echo(f"Using <{skill_group}> skill group")
     typer.echo(f"Plotting skills to {save_name}.{file_type}")
     data = preparator.read_file(skill_group)
+    if group_categories:
+        data = preparator.sort_skills_by_category(data)
     typer.echo(data)
+    plot_data = preparator.reduce_data(data)
     generate_skill_picture(
-        data, columns, save_name, file_type, bar_height,
+        plot_data, columns, save_name, file_type, bar_height,
         background_height, background_color, bar_color, font_color
     )
 
@@ -64,13 +68,14 @@ def main(
 def add(
     skill: Annotated[str, typer.Argument(help="Name of the skill to add")],
     level: Annotated[float, typer.Argument(help="Level of the skill, between 0 and 10", min=0, max=10)],
+    category: Annotated[str, typer.Argument(help="Category, used to group by (optional)")] = "default",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
     """
     Adds the skill to the skill list.
-    If it already exists, the level will be overwritten.
+    If it already exists, the data will be overwritten.
     """
-    preparator.add_skill(skill, level, skill_group)
+    preparator.add_skill(skill, level, category, skill_group)
 
 
 @app.command()
@@ -92,7 +97,6 @@ def list_groups():
     preparator.list_all_groups()
 
 
-# command to delete groups
 @app.command()
 def delete_group(
     group: Annotated[str, typer.Argument(help="Name of group to delete")],
