@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 import typer
+import click
 
 from .utils import success_print, failure_print, info_print
 
@@ -96,6 +97,25 @@ def add_skill(
     success_print(f"Added skill {skill} with level {level}")
 
 
+def interactive_add_skill(
+    file_name: str = DEFAULT_SKILL_FILE_NAME,
+    category: Optional[str] = None,
+):
+    """Interactively adds skills to the skill list."""
+    info_print(f"Using interactive mode, use Ctrl+C to exit, skills will be added to {file_name}")
+    if category is not None:
+        info_print(f"Using category {category}")
+    while True:
+        skill = typer.prompt("Enter skill name")
+        level = typer.prompt("Enter level", type=float)
+        if category is None:
+            category = typer.prompt("Enter category", default=_DEFAULT_CATEGORY)
+        # this should usually not be happening, but just in case
+        if not category:
+            category = _DEFAULT_CATEGORY
+        add_skill(skill, level, category, file_name)
+
+
 def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
     """Removes the skill from the skill list."""
     data = read_file(file_name)
@@ -105,6 +125,18 @@ def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
         success_print(f"Removed skill {skill}")
     else:
         failure_print(f"Skill {skill} not found")
+
+
+def interactive_remove(file_name: str = DEFAULT_SKILL_FILE_NAME):
+    """Interactively removes skills from the skill list."""
+    info_print(f"Using interactive mode, use Ctrl+C to exit, skills will be removed from {file_name}")
+    list_all_skills(file_name)
+    data = read_file(file_name)
+    available_skills = list(data.keys())
+    while True:
+        skill = typer.prompt("Enter skill name", show_choices=False, type=click.Choice(available_skills))
+        remove_skill(skill, file_name)
+        available_skills.remove(skill)
 
 
 def delete_group(group: str):
@@ -134,7 +166,8 @@ def list_all_skills(group: str):
     """List all skills of the group"""
     data = read_file(group)
     if len(data) == 0:
-        failure_print(f"No skills found in group {group}")
+        failure_print(f"No skills found in group {group}, it probably does not exist!")
+        list_all_groups()
         return
     data = sort_skills_by_category(data)
     # create template to show data in a table, start at the end

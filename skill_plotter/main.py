@@ -78,13 +78,30 @@ def add(
     """
     preparator.add_skill(skill, level, category, skill_group)
 
+# add a command to interactively add skills
+# will have category and skill group as optional arguments
+
+
+@app.command()
+def interactive_add(
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+    category: Annotated[Optional[str], typer.Option("--category", "-c", help="Always use this category")] = None,
+):
+    """
+    Interactively add skills to the skill list.
+    If they already exist, the data will be overwritten.
+    If skill group is not given, the default skill group will be used.
+    If category is not given, the category will prompted for each skill.
+    """
+    preparator.interactive_add_skill(skill_group, category)
+
 # Management functionality
 
 
 @app.command()
 def list_groups():
     """
-    Show all existing groups
+    Show all existing groups.
     """
     preparator.list_all_groups()
 
@@ -94,7 +111,7 @@ def list_skills(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
     """
-    Show all skills of given group
+    Show all skills of given group.
     """
     preparator.list_all_skills(skill_group)
 
@@ -107,9 +124,20 @@ def remove(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
     """
-    Removes the skill from the skill list
+    Removes the skill from the skill list.
     """
     preparator.remove_skill(skill, skill_group)
+
+
+@app.command()
+def interactive_remove(
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+):
+    """
+    Interactively remove skills from the skill list.
+    If skill group is not given, the default skill group will be used.
+    """
+    preparator.interactive_remove(skill_group)
 
 
 @app.command()
@@ -117,6 +145,6 @@ def delete_group(
     group: Annotated[str, typer.Argument(help="Name of group to delete")],
 ):
     """
-    Delete a group
+    Delete a group.
     """
     preparator.delete_group(group)
