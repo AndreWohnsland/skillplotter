@@ -48,6 +48,7 @@ def main(
     Plots the set skills to a svg file.
     Can also be used to manage, edit and delete skills.
     You can also define different skill groups, which are handled separately.
+    Different categories help you to group your skills into blocks within the same plot.
     """
     if ctx.invoked_subcommand is not None:
         return
@@ -77,16 +78,7 @@ def add(
     """
     preparator.add_skill(skill, level, category, skill_group)
 
-
-@app.command()
-def remove(
-    skill: Annotated[str, typer.Argument(help="Name of the skill to remove")],
-    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
-):
-    """
-    Removes the skill from the skill list
-    """
-    preparator.remove_skill(skill, skill_group)
+# Management functionality
 
 
 @app.command()
@@ -105,6 +97,19 @@ def list_skills(
     Show all skills of given group
     """
     preparator.list_all_skills(skill_group)
+
+# Remove functionality
+
+
+@app.command()
+def remove(
+    skill: Annotated[str, typer.Argument(help="Name of the skill to remove")],
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+):
+    """
+    Removes the skill from the skill list
+    """
+    preparator.remove_skill(skill, skill_group)
 
 
 @app.command()

@@ -81,17 +81,6 @@ def write_file(data: dict, file_name: str = DEFAULT_SKILL_FILE_NAME) -> None:
         json.dump(data, json_file)
 
 
-def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
-    """Removes the skill from the skill list."""
-    data = read_file(file_name)
-    if skill in data:
-        del data[skill]
-        write_file(data, file_name)
-        success_print(f"Removed skill {skill}")
-    else:
-        failure_print(f"Skill {skill} not found")
-
-
 def add_skill(
     skill: str,
     level: float,
@@ -105,6 +94,29 @@ def add_skill(
     data[skill] = {"level": level, "category": category}
     write_file(data, file_name)
     success_print(f"Added skill {skill} with level {level}")
+
+
+def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
+    """Removes the skill from the skill list."""
+    data = read_file(file_name)
+    if skill in data:
+        del data[skill]
+        write_file(data, file_name)
+        success_print(f"Removed skill {skill}")
+    else:
+        failure_print(f"Skill {skill} not found")
+
+
+def delete_group(group: str):
+    """Deletes the given group file (json) from the app dir
+    Informs user if it was successful or not"""
+    skill_file = _get_target_file(group)
+    if skill_file.exists():
+        skill_file.unlink()
+        success_print(f"Deleted group {group}")
+    else:
+        failure_print(f"Group {group} not found")
+        list_all_groups()
 
 
 def list_all_groups():
@@ -136,15 +148,3 @@ def list_all_skills(group: str):
     for skill, value in data.items():
         typer.echo(template.format(skill, value["level"], value["category"]))
     typer.echo(separator)
-
-
-def delete_group(group: str):
-    """Deletes the given group file (json) from the app dir
-    Informs user if it was successful or not"""
-    skill_file = _get_target_file(group)
-    if skill_file.exists():
-        skill_file.unlink()
-        success_print(f"Deleted group {group}")
-    else:
-        failure_print(f"Group {group} not found")
-        list_all_groups()
