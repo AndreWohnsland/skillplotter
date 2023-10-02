@@ -18,6 +18,7 @@ class PictureTypes(str, Enum):
     SVG = "svg"
     PNG = "png"
     JPG = "jpg"
+    PDF = "pdf"
 
 
 _SKILL_GROUP_ARG = Annotated[str, typer.Option("--skill-group", "-g", help="Use to build different skill groups")]
@@ -35,7 +36,7 @@ def main(
     group_categories: Annotated[bool, typer.Option("--categories", help="Group by categories")] = False,
     bar_height: Annotated[float, typer.Option("--bar-height", help="Height of the bar", min=0, max=1)] = 0.6,
     background_height: Annotated[
-        float, typer.Option("--bg-heigh", help="Height of the bars background", min=0, max=1)
+        float, typer.Option("--bg-height", help="Height of the bars background", min=0, max=1)
     ] = 0.7,
     bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar", min=0, max=1)] = BLUE,
     background_color: Annotated[
@@ -69,7 +70,7 @@ def main(
 def add(
     skill: Annotated[str, typer.Argument(help="Name of the skill to add")],
     level: Annotated[float, typer.Argument(help="Level of the skill, between 0 and 10", min=0, max=10)],
-    category: Annotated[str, typer.Argument(help="Category, used to group by (optional)")] = "default",
+    category: Annotated[str, typer.Option("--category", "-c", help="Category, used to group by")] = "default",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
     """
