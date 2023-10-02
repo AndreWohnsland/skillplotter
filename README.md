@@ -10,7 +10,7 @@
 # The Skill Plotter: Overview
 
 The Skill Plotter is a Python Command Line Interface (CLI) tool to create skill plots for your CV or other documents.
-It can be used to easily and interactively create the plots..
+It can be used to easily and interactively create the plots.
 Instead of using some designer software like Illustrator or just the office package we are going to use matplotlib and python.
 Because, well, we can.
 
