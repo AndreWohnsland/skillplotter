@@ -10,6 +10,8 @@ def version_callback(value: bool):
     """
     if value:
         typer.echo(f"skill-plotter, version {__version__}")
+        typer.echo("For further usage, type: skill-plotter --help")
+        typer.echo(r"Or visit https://skillplotter.readthedocs.io/usage/")
         raise typer.Exit()
 
 
