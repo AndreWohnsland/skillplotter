@@ -14,3 +14,7 @@ Instead of using some designer software like Illustrator or just the office pack
 Because, well, we can.
 
 Here you will find everything to get started!
+
+A small example:
+
+![skillist](skills_example.png "your skillist")
