@@ -34,6 +34,7 @@ theme:
     - announce.dismiss
   name: material
   custom_dir: docs/overrides
+  logo: img/skillplotter.svg
   palette:
     - media: '(prefers-color-scheme: light)'
       scheme: default
@@ -49,7 +50,7 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to light mode
-  # favicon: img/favicon.ico
+  favicon: img/favicon.ico
 plugins:
   - search:
       separator: '[\s\-\.]+'
