@@ -25,16 +25,23 @@ pip install skill-plotter
 
 ## Usage
 
-Just use the CLI command to run the plotter:
+Just use the CLI command to run the plotter, the help shows you all possible things to do:
 
 ```bash
 skill-plotter --help
+# Add a skill
+skill-plotter add Python 9
+# or use it interactively
+skill-plotter interactive-add
+# Remove a skill
+skill-plotter remove Python
+# or use it interactively
+skill-plotter interactive-remove
+# Do the plot
+skill-plotter
 ```
-<!-- TODO: Add command interface -->
 
-## Colors
-
-You can choose any colors given in the [matplotlib documentation](https://matplotlib.org/3.1.0/tutorials/colors/colors.html).
+If you want to have a complete walkthrough, you can have a look at the [usage documentation](https://skillplotter.readthedocs.io/usage/).
 
 ## Development
 
@@ -47,6 +54,6 @@ You can choose any colors given in the [matplotlib documentation](https://matplo
 
 ## Examples
 
-Here you can see an example of the generated svg. Currently there are always two equal divided columns, in the future there will be the option to choose between one to three columns.
+Here you can see an example of the generated skill plot:
 
 ![skillist](https://github.com/AndreWohnsland/skillplotter/blob/master/docs/skills_example.png?raw=true)
