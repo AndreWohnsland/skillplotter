@@ -49,4 +49,4 @@ You can choose any colors given in the [matplotlib documentation](https://matplo
 
 Here you can see an example of the generated svg. Currently there are always two equal divided columns, in the future there will be the option to choose between one to three columns.
 
-![skillist](docs/skills_example.png "your skillist")
+![skillist](https://github.com/AndreWohnsland/skillplotter/blob/master/docs/skills_example.png?raw=true)
