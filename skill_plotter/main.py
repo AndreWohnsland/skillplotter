@@ -38,11 +38,10 @@ def main(
     background_height: Annotated[
         float, typer.Option("--bg-height", help="Height of the bars background", min=0, max=1)
     ] = 0.7,
-    bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar", min=0, max=1)] = BLUE,
-    background_color: Annotated[
-        str, typer.Option("--bg-color", help="Color of the bars background", min=0, max=1)
-    ] = DARK_GRAY,
-    font_color: Annotated[str, typer.Option("--font-color", help="Color of the font", min=0, max=1)] = DARK_GRAY,
+    bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar")] = BLUE,
+    background_color: Annotated[str, typer.Option("--bg-color", help="Color of the bars background")] = DARK_GRAY,
+    font_color: Annotated[str, typer.Option("--font-color", help="Color of the font")] = DARK_GRAY,
+    canvas_color: Annotated[Optional[str], typer.Option(help="Color behind the plot")] = None,
     version: Annotated[Optional[bool], typer.Option("--version", "-V", callback=version_callback)] = None,
 ):
     """
@@ -58,11 +57,11 @@ def main(
     data = preparator.read_file(skill_group)
     if group_categories:
         data = preparator.sort_skills_by_category(data)
-    typer.echo(data)
     plot_data = preparator.reduce_data(data)
     generate_skill_picture(
         plot_data, columns, save_name, file_type, bar_height,
-        background_height, background_color, bar_color, font_color
+        background_height, background_color, bar_color, font_color,
+        canvas_color,
     )
 
 
