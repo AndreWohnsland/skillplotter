@@ -107,7 +107,11 @@ def interactive_add_skill(
         info_print(f"Using category {used_category}")
     while True:
         skill = typer.prompt("Enter skill name")
-        level = typer.prompt("Enter level", type=float)
+        level = 0
+        while level <= 0 or level > 10:
+            level = typer.prompt("Enter level [0-10]", type=float)
+            if level <= 0 or level > 10:
+                failure_print("Level must be between 0 and 10 and not 0")
         if used_category is None:
             category = typer.prompt("Enter category", default=_DEFAULT_CATEGORY)
         else:
