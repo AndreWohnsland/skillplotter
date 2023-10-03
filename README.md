@@ -56,4 +56,4 @@ If you want to have a complete walkthrough, you can have a look at the [usage do
 
 Here you can see an example of the generated skill plot:
 
-![skillist](https://github.com/AndreWohnsland/skillplotter/blob/master/docs/skills_example.png?raw=true)
+![skillist](https://github.com/AndreWohnsland/skillplotter/blob/master/docs/img/skills_example.png?raw=true)

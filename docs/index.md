@@ -17,4 +17,4 @@ Here you will find everything to get started!
 
 A small example:
 
-![skillist](skills_example.png "your skillist")
+![skillist](img/skills_example.png "your skillist")
