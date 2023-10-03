@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-from typing import Union
+from typing import Union, Optional
+
 
 from .preparator import split_dict_evenly
 
@@ -65,7 +66,6 @@ def generate_diagram(
     ax.spines["top"].set_visible(False)
     ax.spines["left"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    # plt.setp(ax.get_xticklabels(), color="w", fontsize=8)
     ax.get_xaxis().set_visible(False)
 
 
@@ -79,6 +79,7 @@ def generate_skill_picture(
     background_color: _COLOR = DARK_GRAY,
     bar_color: _COLOR = DARK_GRAY,
     font_color: _COLOR = BLUE,
+    canvas_color: Optional[_COLOR] = None,
 ):
     """Generate a bar diagram for the given skills.
 
@@ -99,7 +100,7 @@ def generate_skill_picture(
     # generate the diagram, splits the values into two lists to plot.
     # this should be done in the future over one loop
     # the loop decides what to put when and how many columns
-    _, axes = plt.subplots(1, n_splits, figsize=(10 * n_splits, split_len))
+    fig, axes = plt.subplots(1, n_splits, figsize=(10 * n_splits, split_len))
 
     # will get an iterable error since when using only one column, axes is not a list
     # just put the Axes object into a list to fix this
@@ -108,5 +109,15 @@ def generate_skill_picture(
 
     for ax, skills in zip(axes, split_skills):
         generate_diagram(ax, skills, bar_height, background_height, background_color, bar_color, font_color)
+        # need also to set face color of each axis
+        if canvas_color is not None:
+            ax.set_facecolor(canvas_color)
+    # set the facecolor of the canvas to the given color
+    extra_args = {}
+    if canvas_color is not None:
+        fig.set_facecolor(canvas_color)
+    # only transparent if there is no canvas color
+    else:
+        extra_args["transparent"] = True
     plt.tight_layout()
-    plt.savefig(f"{save_name}.{file_type}", format=file_type, transparent=True)
+    plt.savefig(f"{save_name}.{file_type}", format=file_type, **extra_args)

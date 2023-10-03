@@ -3,7 +3,7 @@
 In this section, you will get a brief introduction to the usage of the package.
 If you want to have deeper insight into the functionality of the functions, you can always use the `--help` flag.
 
-!!! note
+!!! note "Easy Start"
     This package is quite flexible, but the base case is quite easy.
     So if you want a fast test, use `skill-plotter add` and then `skill-plotter` to see first results. 
 
@@ -145,6 +145,10 @@ skill-plotter -c
 This will group the skills by your defined categories, as well the skills will be sorted within the category by decreasing level.
 If the default category exist, skills within this category will be shown first.
 
+!!! tip "Non-Alphabetical Order"
+    You can also use numbers for your categories to order them by increasing number.
+    This is useful if you want a specific, non-alphabetical order of the categories.
+
 This will use the skill group `group1` to plot the skills.
 
 ### Defining the Output File
@@ -168,6 +172,7 @@ Some options are:
 - `--bar-color`: The color of the bars in the plot
 - `--bg-color`: The color of the background bars in the plot
 - `--font-color`: The color of the font in the plot
+- `--canvas-color`: The color behind the plot
 
 You can experiment with those values and find the best fit for you.
 I recommend using hex color codes for the colors.
