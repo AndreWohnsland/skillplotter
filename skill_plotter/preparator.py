@@ -51,7 +51,7 @@ def sort_skills_by_category(skills: dict[str, dict[str, Any]]) -> dict[str, dict
     return dict(
         sorted(
             skills.items(),
-            key=lambda x: (x[1]["category"] != _DEFAULT_CATEGORY, x[1]["category"], x[1]["level"])
+            key=lambda x: (x[1]["category"] != _DEFAULT_CATEGORY, x[1]["category"], -x[1]["level"])
         )
     )
 
@@ -99,21 +99,25 @@ def add_skill(
 
 def interactive_add_skill(
     file_name: str = DEFAULT_SKILL_FILE_NAME,
-    category: Optional[str] = None,
+    used_category: Optional[str] = None,
 ):
     """Interactively adds skills to the skill list."""
     info_print(f"Using interactive mode, use Ctrl+C to exit, skills will be added to {file_name}")
-    if category is not None:
-        info_print(f"Using category {category}")
+    if used_category is not None:
+        info_print(f"Using category {used_category}")
     while True:
         skill = typer.prompt("Enter skill name")
         level = typer.prompt("Enter level", type=float)
-        if category is None:
+        if used_category is None:
             category = typer.prompt("Enter category", default=_DEFAULT_CATEGORY)
+        else:
+            category = used_category
         # this should usually not be happening, but just in case
         if not category:
             category = _DEFAULT_CATEGORY
         add_skill(skill, level, category, file_name)
+        # need to reset category!
+        category = None
 
 
 def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
