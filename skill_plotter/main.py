@@ -1,24 +1,15 @@
 # pylint: disable=unused-argument
 
 from typing import Optional, Annotated
-from enum import Enum
+
 import typer
 
-from .utils import version_callback
+from .utils import StyleTypes, version_callback, PictureTypes
 from .preparator import DEFAULT_SKILL_FILE_NAME
 from .plotter import generate_skill_picture, BLUE, DARK_GRAY
 from . import preparator
 
 app = typer.Typer()
-
-
-class PictureTypes(str, Enum):
-    """Save file types."""
-
-    SVG = "svg"
-    PNG = "png"
-    JPG = "jpg"
-    PDF = "pdf"
 
 
 _SKILL_GROUP_ARG = Annotated[str, typer.Option("--skill-group", "-g", help="Use to build different skill groups")]
@@ -42,6 +33,7 @@ def main(
     background_color: Annotated[str, typer.Option("--bg-color", help="Color of the bars background")] = DARK_GRAY,
     font_color: Annotated[str, typer.Option("--font-color", help="Color of the font")] = DARK_GRAY,
     canvas_color: Annotated[Optional[str], typer.Option(help="Color behind the plot")] = None,
+    style: Annotated[Optional[list[StyleTypes]], typer.Option("--style", "-s", help="Style of the plot")] = None,
     version: Annotated[Optional[bool], typer.Option("--version", "-V", callback=version_callback)] = None,
 ):
     """
@@ -52,8 +44,11 @@ def main(
     """
     if ctx.invoked_subcommand is not None:
         return
-    typer.echo(f"Using <{skill_group}> skill group")
-    typer.echo(f"Plotting skills to {save_name}.{file_type}")
+    if style is None:
+        style = []
+    style_string = ", ".join([s.value for s in style]) if style else "default"
+    typer.echo(f"Using <{skill_group}> skill group, styles: <{style_string}>")
+    typer.echo(f"Plotting skills to <{save_name}.{file_type}>")
     data = preparator.read_file(skill_group)
     if group_categories:
         data = preparator.sort_skills_by_category(data)
@@ -61,7 +56,7 @@ def main(
     generate_skill_picture(
         plot_data, columns, save_name, file_type, bar_height,
         background_height, background_color, bar_color, font_color,
-        canvas_color,
+        canvas_color, style,
     )
 
 

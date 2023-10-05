@@ -1,7 +1,25 @@
 """Module for utility functions and constants."""
+from enum import Enum
 
 import typer
 from . import __version__
+
+
+class PictureTypes(str, Enum):
+    """Save file types."""
+
+    SVG = "svg"
+    PNG = "png"
+    JPG = "jpg"
+    PDF = "pdf"
+
+
+class StyleTypes(str, Enum):
+    """Different types of styling for the plot"""
+
+    OUTLINE = "outline"
+    ROUND = "round"
+    XKCD = "xkcd"
 
 
 def version_callback(value: bool):
