@@ -173,13 +173,41 @@ Some options are:
 - `--bg-color`: The color of the background bars in the plot
 - `--font-color`: The color of the font in the plot
 - `--canvas-color`: The color behind the plot
+- `--style` or `-s`: A predefined style, can use multiple
+    - outline: The background bars got no fill but an outline
+    - round: All bars got rounded corners
+    - xkcd: Using the [xkcd style](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xkcd.html), need "Humor Sans" font
 
 You can experiment with those values and find the best fit for you.
 I recommend using hex color codes for the colors.
 
 ```bash
-skill-plotter --bar-height 0.5 --bg-height 0.7 --bar-color "#000000" --bg-color "#FFFFFF" --font-color "#000000"
+skill-plotter --bar-height 0.5 --bg-height 0.7 --bar-color "#000000" --bg-color "#FFFFFF" --font-color "#000000" -s round -s outline
 ```
+
+!!! bug "Font not Found"
+    It may happen that matplotlib does not find the font you installed.
+
+    The best thing is to execute python code to find the font:
+
+    ```python
+    from matplotlib import font_manager
+
+    font_dirs = ['path/to/font/']
+    font_files = font_manager.findSystemFonts(fontpaths=font_dirs)
+
+    for font_file in font_files:
+        # you can also just use this command with the exact path to the missing font file
+        font_manager.fontManager.addfont(font_file)
+
+    # testing if it is registered:
+    font_manager.findfont('Humor Sans') 
+    # >> '....\Humor-Sans.ttf'
+
+    ```
+    If you are using a virtual environment, make sure to execute the code within that Python.
+
+    Deleting the [fontcache](https://github.com/matplotlib/matplotlib/issues/3590) may also resolve this issue
 
 ## Showing Data
 
