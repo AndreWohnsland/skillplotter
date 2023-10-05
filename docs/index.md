@@ -15,6 +15,24 @@ Because, well, we can.
 
 Here you will find everything to get started!
 
-A small example:
+### Some Examples
 
-![skillist](img/skills_example.png "your skillist")
+<figure markdown>
+  ![skillist1](img/skills_example.png)
+  <figcaption>Default Settings</figcaption>
+</figure>
+
+<figure markdown>
+  ![skillist2](img/skills_example2.png)
+  <figcaption>Using round, smaller bar height + orange</figcaption>
+</figure>
+
+<figure markdown>
+  ![skillist3](img/skills_example3.png)
+  <figcaption>Using round, outline, xkcd</figcaption>
+</figure>
+
+<figure markdown>
+  ![skillist4](img/skills_example4.png)
+  <figcaption>Using round, xkcd, changed color</figcaption>
+</figure>
