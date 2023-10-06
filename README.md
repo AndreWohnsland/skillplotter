@@ -1,6 +1,6 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/AndreWohnsland/skillplotter)
 ![GitHub Release Date](https://img.shields.io/github/release-date/AndreWohnsland/skillplotter)
-![PyPI - Version](https://img.shields.io/pypi/v/skill-plotter)
+[![PyPI - Version](https://img.shields.io/pypi/v/skill-plotter)](https://pypi.org/project/skill-plotter/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/skill-plotter)
 ![Python Version](https://img.shields.io/badge/python-%3E%3D%203.9-blue)
 ![GitHub](https://img.shields.io/github/license/AndreWohnsland/skillplotter)
