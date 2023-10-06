@@ -6,6 +6,10 @@ authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "skill_plotter" }]
+keywords = ["skill", "plot", "cli", "tool", "cv", "resume"]
+homepage = "https://skillplotter.readthedocs.io/"
+documentation = "https://skillplotter.readthedocs.io"
+repository = "https://github.com/AndreWohnsland/skillplotter"
 
 [tool.poetry.scripts]
 skill-plotter = "skill_plotter.main:app"
@@ -13,7 +17,7 @@ skill-plotter = "skill_plotter.main:app"
 [tool.poetry.dependencies]
 python = "<3.13,>=3.9"
 matplotlib = "^3.8"
-typer = {extras = ["all"], version = "^0.9.0"}
+typer = { extras = ["all"], version = "^0.9.0" }
 pandas = "^2.1.1"
 
 
