@@ -132,8 +132,9 @@ This gives you the option to manage multiple profiles or pictures.
 skill-plotter -g group1
 ```
 
+This will use the skill group `group1` to plot the skills.
 
-### Define Plotting Order
+### Defining Plotting Order
 
 By default, the skills will be plotted in the order you entered them.
 If you want to group the skills by category, you can use the `--categories` or short `-c` option:
@@ -149,7 +150,6 @@ If the default category exist, skills within this category will be shown first.
     You can also use numbers for your categories to order them by increasing number.
     This is useful if you want a specific, non-alphabetical order of the categories.
 
-This will use the skill group `group1` to plot the skills.
 
 ### Defining the Output File
 
@@ -162,7 +162,7 @@ skill-plotter -n my_skills -t png
 
 This will save the output to a file called `my_skills.png`.
 
-### Define the Style
+### Defining the Style
 
 You have also the possibility to alter the output plot.
 Some options are:
@@ -209,7 +209,7 @@ skill-plotter --bar-height 0.5 --bg-height 0.7 --bar-color "#000000" --bg-color 
 
     Deleting the [fontcache](https://github.com/matplotlib/matplotlib/issues/3590) may also resolve this issue
 
-## Showing Data
+## Showing Entered Data
 
 Especially when you have multiple skill groups, or haven't used them for a long time you might want to see the data you entered.
 
