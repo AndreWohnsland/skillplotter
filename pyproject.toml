@@ -16,15 +16,15 @@ skill-plotter = "skill_plotter.main:app"
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.9"
-matplotlib = "^3.8"
+matplotlib = "^3.8.2"
 typer = { extras = ["all"], version = "^0.9.0" }
-pandas = "^2.1.1"
+pandas = "^2.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
 mkdocs = "^1.5.3"
-jupyterlab = "^4.0.6"
-mkdocs-material = "^9.4.2"
+jupyterlab = "^4.0.11"
+mkdocs-material = "^9.5.5"
 
 [build-system]
 requires = ["poetry-core"]
