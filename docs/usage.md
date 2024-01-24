@@ -68,6 +68,7 @@ When you want to add multiple skills using a specific group or category, you can
 ```bash
 skill-plotter interactive-add -g group1 -c programming
 ```
+
 This will add all skills to the group `group1` and use the category `programming`.
 You will not be prompted for the category during the interactive session.
 
@@ -149,7 +150,6 @@ If the default category exist, skills within this category will be shown first.
 !!! tip "Non-Alphabetical Order"
     You can also use numbers for your categories to order them by increasing number.
     This is useful if you want a specific, non-alphabetical order of the categories.
-
 
 ### Defining the Output File
 
