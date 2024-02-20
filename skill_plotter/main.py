@@ -12,29 +12,42 @@ from . import preparator
 app = typer.Typer()
 
 
-_SKILL_GROUP_ARG = Annotated[str, typer.Option("--skill-group", "-g", help="Use to build different skill groups")]
+_SKILL_GROUP_ARG = Annotated[str, typer.Option(
+    "--skill-group", "-g", help="Use to build different skill groups")]
 
 
 @app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
     file_type: Annotated[
-        PictureTypes, typer.Option("--file-type", "-t", help="File type of the output file")
+        PictureTypes, typer.Option(
+            "--file-type", "-t", help="File type of the output file")
     ] = PictureTypes.SVG,
-    save_name: Annotated[str, typer.Option("--file-name", "-n", help="Name of the output file")] = "skills",
+    save_name: Annotated[str, typer.Option(
+        "--file-name", "-n", help="Name of the output file")] = "skills",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
-    columns: Annotated[int, typer.Option("--columns", "-c", help="Number of columns", min=1, max=10)] = 2,
-    group_categories: Annotated[bool, typer.Option("--categories", help="Group by categories")] = False,
-    bar_height: Annotated[float, typer.Option("--bar-height", help="Height of the bar", min=0, max=1)] = 0.6,
+    columns: Annotated[int, typer.Option(
+        "--columns", "-c", help="Number of columns", min=1, max=10)] = 2,
+    group_categories: Annotated[bool, typer.Option(
+        "--categories", help="Group by categories")] = False,
+    bar_height: Annotated[float, typer.Option(
+        "--bar-height", help="Height of the bar", min=0, max=1)] = 0.6,
     background_height: Annotated[
-        float, typer.Option("--bg-height", help="Height of the bars background", min=0, max=1)
+        float, typer.Option(
+            "--bg-height", help="Height of the bars background", min=0, max=1)
     ] = 0.7,
-    bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar")] = BLUE,
-    background_color: Annotated[str, typer.Option("--bg-color", help="Color of the bars background")] = DARK_GRAY,
-    font_color: Annotated[str, typer.Option("--font-color", help="Color of the font")] = DARK_GRAY,
-    canvas_color: Annotated[Optional[str], typer.Option(help="Color behind the plot")] = None,
-    style: Annotated[Optional[list[StyleTypes]], typer.Option("--style", "-s", help="Style of the plot")] = None,
-    version: Annotated[Optional[bool], typer.Option("--version", "-V", callback=version_callback)] = None,
+    bar_color: Annotated[str, typer.Option(
+        "--bar-color", help="Color of the bar")] = BLUE,
+    background_color: Annotated[str, typer.Option(
+        "--bg-color", help="Color of the bars background")] = DARK_GRAY,
+    font_color: Annotated[str, typer.Option(
+        "--font-color", help="Color of the font")] = DARK_GRAY,
+    canvas_color: Annotated[Optional[str], typer.Option(
+        help="Color behind the plot")] = None,
+    style: Annotated[Optional[list[StyleTypes]], typer.Option(
+        "--style", "-s", help="Style of the plot")] = None,
+    version: Annotated[Optional[bool], typer.Option(
+        "--version", "-V", callback=version_callback)] = None,
 ):
     """
     Plots the set skills to a svg file.
@@ -64,7 +77,8 @@ def main(
 def add(
     skill: Annotated[str, typer.Argument(help="Name of the skill to add")],
     level: Annotated[float, typer.Argument(help="Level of the skill, between 0 and 10", min=0, max=10)],
-    category: Annotated[str, typer.Option("--category", "-c", help="Category, used to group by")] = "default",
+    category: Annotated[str, typer.Option(
+        "--category", "-c", help="Category, used to group by")] = "default",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
     """
@@ -80,7 +94,8 @@ def add(
 @app.command()
 def interactive_add(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
-    category: Annotated[Optional[str], typer.Option("--category", "-c", help="Always use this category")] = None,
+    category: Annotated[Optional[str], typer.Option(
+        "--category", "-c", help="Always use this category")] = None,
 ):
     """
     Interactively add skills to the skill list.
@@ -143,3 +158,28 @@ def delete_group(
     Delete a group.
     """
     preparator.delete_group(group)
+
+
+@app.command()
+def export_skills(
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+):
+    """
+    Export the skill list to a file.
+    If skill group is not given, the default skill group will be used.
+    """
+    # preparator.export_skills_to_file(skill_group)
+
+
+@app.command()
+def import_skills(
+    file: Annotated[str, typer.Argument(help="Name of the file to import")],
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+    overwrite: Annotated[bool, typer.Option(
+        "--overwrite", "-o", help="Ignore existing skills in existing group")] = False,
+):
+    """
+    Import skills from a file to a given group.
+    If skill group is not given, the default skill group will be used.
+    """
+    # preparator.import_skills_from_file(file, skill_group, overwrite)
