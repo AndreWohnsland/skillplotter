@@ -162,6 +162,7 @@ def delete_group(
 
 @app.command()
 def export_skills(
+    export_name: Annotated[str, typer.Argument(help="Name of the file to export to")],
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
     """
