@@ -1,6 +1,7 @@
 # pylint: disable=unused-argument
 
 from typing import Optional, Annotated
+from pathlib import Path
 
 import typer
 
@@ -174,7 +175,7 @@ def export_skills(
 
 @app.command()
 def import_skills(
-    file: Annotated[str, typer.Argument(help="Name of the file to import")],
+    file: Annotated[Path, typer.Argument(help="Path of the file to import")],
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
     overwrite: Annotated[bool, typer.Option(
         "--overwrite", "-o", help="Ignore existing skills in existing group")] = False,
