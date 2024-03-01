@@ -37,7 +37,7 @@ def split_dict_evenly(d: dict, n: int) -> list[dict]:
     max_len = len(splitted[0])
     for i in splitted:
         if len(i) < max_len:
-            i[''] = 0
+            i[""] = 0
     return splitted
 
 
@@ -49,10 +49,7 @@ def sort_skills_by_category(skills: dict[str, dict[str, Any]]) -> dict[str, dict
     # sort by category and then by level
     # in addition also list the skills with default category first
     return dict(
-        sorted(
-            skills.items(),
-            key=lambda x: (x[1]["category"] != _DEFAULT_CATEGORY, x[1]["category"], -x[1]["level"])
-        )
+        sorted(skills.items(), key=lambda x: (x[1]["category"] != _DEFAULT_CATEGORY, x[1]["category"], -x[1]["level"]))
     )
 
 
@@ -82,12 +79,7 @@ def write_file(data: dict, file_name: str = DEFAULT_SKILL_FILE_NAME) -> None:
         json.dump(data, json_file)
 
 
-def add_skill(
-    skill: str,
-    level: float,
-    category: str = _DEFAULT_CATEGORY,
-    file_name: str = DEFAULT_SKILL_FILE_NAME
-):
+def add_skill(skill: str, level: float, category: str = _DEFAULT_CATEGORY, file_name: str = DEFAULT_SKILL_FILE_NAME):
     """Adds the skill to the skill list.
     If it already exists, the level will be overwritten.
     """
@@ -189,3 +181,15 @@ def list_all_skills(group: str):
     for skill, value in data.items():
         typer.echo(template.format(skill, value["level"], value["category"]))
     typer.echo(separator)
+
+
+def export_skills_to_file(export_name: str, skill_group: str):
+    """Exports the skills of the given group to a file."""
+    file_to_export = _get_target_file(skill_group)
+    if not file_to_export.exists():
+        failure_print(f"Group {skill_group} does not exist, only those are valid:")
+        list_all_groups()
+        return
+    target_file = Path(f"{export_name}.json")
+    target_file.write_bytes(file_to_export.read_bytes())
+    success_print(f"Exported skills in group {skill_group} to file {target_file.absolute()}")
