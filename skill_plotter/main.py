@@ -170,7 +170,7 @@ def export_skills(
     Export the skill list to a file.
     If skill group is not given, the default skill group will be used.
     """
-    # preparator.export_skills_to_file(skill_group)
+    preparator.export_skills_to_file(export_name, skill_group)
 
 
 @app.command()
