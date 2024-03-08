@@ -1,4 +1,5 @@
 import json
+import jsonschema
 from pathlib import Path
 from typing import Any, Optional
 import typer
@@ -13,6 +14,28 @@ if not Path(_app_dir).exists():
     Path(_app_dir).mkdir(parents=True)
 DEFAULT_SKILL_FILE_NAME = "skills"
 _DEFAULT_CATEGORY = "default"
+
+
+# Validate the data against the schema
+def _validate_data(data: dict):
+    """Validates the given data to be compatible with the schema."""
+    # schema is {"skill_name": {"level": 3.5, "category": "default"}, ...}
+    schema = {
+        "type": "object",
+        "patternProperties": {
+            ".*": {
+                "type": "object",
+                "properties": {"level": {"type": "number"}, "category": {"type": "string"}},
+                "required": ["level", "category"],
+            }
+        },
+        "additionalProperties": False,
+    }
+    try:
+        jsonschema.validate(data, schema)
+        return True
+    except jsonschema.ValidationError:
+        return False
 
 
 def _get_target_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> Path:
