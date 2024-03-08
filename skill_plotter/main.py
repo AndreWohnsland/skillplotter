@@ -177,11 +177,12 @@ def export_skills(
 def import_skills(
     file: Annotated[Path, typer.Argument(help="Path of the file to import")],
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
-    overwrite: Annotated[bool, typer.Option(
-        "--overwrite", "-o", help="Ignore existing skills in existing group")] = False,
+    overwrite: Annotated[
+        bool, typer.Option("--overwrite", "-o", help="Overwrite data if group already exists, merge otherwise")
+    ] = False,
 ):
     """
     Import skills from a file to a given group.
     If skill group is not given, the default skill group will be used.
     """
-    # preparator.import_skills_from_file(file, skill_group, overwrite)
+    preparator.import_skills_from_file(file, skill_group, overwrite)
