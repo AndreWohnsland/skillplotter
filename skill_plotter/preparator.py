@@ -216,3 +216,37 @@ def export_skills_to_file(export_name: str, skill_group: str):
     target_file = Path(f"{export_name}.json")
     target_file.write_bytes(file_to_export.read_bytes())
     success_print(f"Exported skills in group {skill_group} to file {target_file.absolute()}")
+
+
+def import_skills_from_file(import_file: Path, skill_group: str, overwrite: bool):
+    """Imports the given file to the skill group or creates a new one."""
+    # check if import file is valid (exists and is json file)
+    if not import_file.exists():
+        failure_print(f"Import file {import_file} does not exist")
+        return
+    if not import_file.suffix == ".json":
+        failure_print(f"Import file {import_file} is not a JSON file")
+        return
+
+    with open(import_file, "r", encoding="utf-8") as json_file:
+        import_data = json.load(json_file)
+
+    if not _validate_data(import_data):
+        failure_print(f"Import file {import_file} does not have the correct format, check if it is a valid skill file")
+        return
+
+    # in case of overwrite, just overwrite the data
+    existing_data = read_file(skill_group)
+    write_data = import_data
+    if existing_data and overwrite:
+        info_print(f"Overwrite is set and group already exists, replace skill data in group {skill_group}.")
+    elif existing_data:
+        # merge the data, if the skill already exists, overwrite it
+        write_data = {**existing_data, **import_data}
+        info_print(
+            f"Skill group already exists. Merging imported data into group {skill_group}. "
+            + "If a skill already exists, the imported data will overwrite the existing one."
+        )
+
+    write_file(write_data, skill_group)
+    success_print(f"Imported skill data from {import_file}.")
