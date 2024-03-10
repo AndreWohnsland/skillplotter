@@ -224,7 +224,7 @@ def import_skills_from_file(import_file: Path, skill_group: str, overwrite: bool
     if not import_file.exists():
         failure_print(f"Import file {import_file} does not exist")
         return
-    if not import_file.suffix == ".json":
+    if import_file.suffix != ".json":
         failure_print(f"Import file {import_file} is not a JSON file")
         return
 
