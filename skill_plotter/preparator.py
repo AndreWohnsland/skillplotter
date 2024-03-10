@@ -1,4 +1,5 @@
 import json
+import jsonschema
 from pathlib import Path
 from typing import Any, Optional
 import typer
@@ -13,6 +14,28 @@ if not Path(_app_dir).exists():
     Path(_app_dir).mkdir(parents=True)
 DEFAULT_SKILL_FILE_NAME = "skills"
 _DEFAULT_CATEGORY = "default"
+
+
+# Validate the data against the schema
+def _validate_data(data: dict):
+    """Validates the given data to be compatible with the schema."""
+    # schema is {"skill_name": {"level": 3.5, "category": "default"}, ...}
+    schema = {
+        "type": "object",
+        "patternProperties": {
+            ".*": {
+                "type": "object",
+                "properties": {"level": {"type": "number"}, "category": {"type": "string"}},
+                "required": ["level", "category"],
+            }
+        },
+        "additionalProperties": False,
+    }
+    try:
+        jsonschema.validate(data, schema)
+        return True
+    except jsonschema.ValidationError:
+        return False
 
 
 def _get_target_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> Path:
@@ -37,7 +60,7 @@ def split_dict_evenly(d: dict, n: int) -> list[dict]:
     max_len = len(splitted[0])
     for i in splitted:
         if len(i) < max_len:
-            i[''] = 0
+            i[""] = 0
     return splitted
 
 
@@ -49,10 +72,7 @@ def sort_skills_by_category(skills: dict[str, dict[str, Any]]) -> dict[str, dict
     # sort by category and then by level
     # in addition also list the skills with default category first
     return dict(
-        sorted(
-            skills.items(),
-            key=lambda x: (x[1]["category"] != _DEFAULT_CATEGORY, x[1]["category"], -x[1]["level"])
-        )
+        sorted(skills.items(), key=lambda x: (x[1]["category"] != _DEFAULT_CATEGORY, x[1]["category"], -x[1]["level"]))
     )
 
 
@@ -82,12 +102,7 @@ def write_file(data: dict, file_name: str = DEFAULT_SKILL_FILE_NAME) -> None:
         json.dump(data, json_file)
 
 
-def add_skill(
-    skill: str,
-    level: float,
-    category: str = _DEFAULT_CATEGORY,
-    file_name: str = DEFAULT_SKILL_FILE_NAME
-):
+def add_skill(skill: str, level: float, category: str = _DEFAULT_CATEGORY, file_name: str = DEFAULT_SKILL_FILE_NAME):
     """Adds the skill to the skill list.
     If it already exists, the level will be overwritten.
     """
@@ -189,3 +204,49 @@ def list_all_skills(group: str):
     for skill, value in data.items():
         typer.echo(template.format(skill, value["level"], value["category"]))
     typer.echo(separator)
+
+
+def export_skills_to_file(export_name: str, skill_group: str):
+    """Exports the skills of the given group to a file."""
+    file_to_export = _get_target_file(skill_group)
+    if not file_to_export.exists():
+        failure_print(f"Group {skill_group} does not exist, only those are valid:")
+        list_all_groups()
+        return
+    target_file = Path(f"{export_name}.json")
+    target_file.write_bytes(file_to_export.read_bytes())
+    success_print(f"Exported skills in group {skill_group} to file {target_file.absolute()}")
+
+
+def import_skills_from_file(import_file: Path, skill_group: str, overwrite: bool):
+    """Imports the given file to the skill group or creates a new one."""
+    # check if import file is valid (exists and is json file)
+    if not import_file.exists():
+        failure_print(f"Import file {import_file} does not exist")
+        return
+    if import_file.suffix != ".json":
+        failure_print(f"Import file {import_file} is not a JSON file")
+        return
+
+    with open(import_file, "r", encoding="utf-8") as json_file:
+        import_data = json.load(json_file)
+
+    if not _validate_data(import_data):
+        failure_print(f"Import file {import_file} does not have the correct format, check if it is a valid skill file")
+        return
+
+    # in case of overwrite, just overwrite the data
+    existing_data = read_file(skill_group)
+    write_data = import_data
+    if existing_data and overwrite:
+        info_print(f"Overwrite is set and group already exists, replace skill data in group {skill_group}.")
+    elif existing_data:
+        # merge the data, if the skill already exists, overwrite it
+        write_data = {**existing_data, **import_data}
+        info_print(
+            f"Skill group already exists. Merging imported data into group {skill_group}. "
+            + "If a skill already exists, the imported data will overwrite the existing one."
+        )
+
+    write_file(write_data, skill_group)
+    success_print(f"Imported skill data from {import_file}.")

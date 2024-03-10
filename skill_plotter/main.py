@@ -1,6 +1,7 @@
 # pylint: disable=unused-argument
 
 from typing import Optional, Annotated
+from pathlib import Path
 
 import typer
 
@@ -54,9 +55,17 @@ def main(
         data = preparator.sort_skills_by_category(data)
     plot_data = preparator.reduce_data(data)
     generate_skill_picture(
-        plot_data, columns, save_name, file_type, bar_height,
-        background_height, background_color, bar_color, font_color,
-        canvas_color, style,
+        plot_data,
+        columns,
+        save_name,
+        file_type,
+        bar_height,
+        background_height,
+        background_color,
+        bar_color,
+        font_color,
+        canvas_color,
+        style,
     )
 
 
@@ -72,6 +81,7 @@ def add(
     If it already exists, the data will be overwritten.
     """
     preparator.add_skill(skill, level, category, skill_group)
+
 
 # add a command to interactively add skills
 # will have category and skill group as optional arguments
@@ -89,6 +99,7 @@ def interactive_add(
     If category is not given, the category will prompted for each skill.
     """
     preparator.interactive_add_skill(skill_group, category)
+
 
 # Management functionality
 
@@ -109,6 +120,7 @@ def list_skills(
     Show all skills of given group.
     """
     preparator.list_all_skills(skill_group)
+
 
 # Remove functionality
 
@@ -143,3 +155,30 @@ def delete_group(
     Delete a group.
     """
     preparator.delete_group(group)
+
+
+@app.command()
+def export_skills(
+    export_name: Annotated[str, typer.Argument(help="Name of the file to export to")],
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+):
+    """
+    Export the skill list to a file.
+    If skill group is not given, the default skill group will be used.
+    """
+    preparator.export_skills_to_file(export_name, skill_group)
+
+
+@app.command()
+def import_skills(
+    file: Annotated[Path, typer.Argument(help="Path of the file to import")],
+    skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
+    overwrite: Annotated[
+        bool, typer.Option("--overwrite", "-o", help="Overwrite data if group already exists, merge otherwise")
+    ] = False,
+):
+    """
+    Import skills from a file to a given group.
+    If skill group is not given, the default skill group will be used.
+    """
+    preparator.import_skills_from_file(file, skill_group, overwrite)
