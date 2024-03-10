@@ -227,6 +227,32 @@ skill-plotter list-skills -g group1
 
 If no group is specified, the default group (skills) will be used.
 
+## Transferring Data
+
+With the CLI, you can also transfer data from one skill group to another, or save your data to an external file.
+
+### Exporting Data
+
+You can use the `export` command to save your data to a file:
+
+```bash
+skill-plotter export -g group1 export_file
+```
+
+As with the other commands, you can choose the skill group you want to export.
+
+### Importing Data
+
+You can use the `import` command to load your data from a file:
+
+```bash
+skill-plotter import -g group1 ./import_file.json
+```
+
+Simply provide the path to the file and the skill group you want to import to.
+You can also use the overwrite option `-o` to ignore and overwrite data if the group already exists.
+Otherwise the data will be merged, imported skills take precedence.
+
 <!-- # CLI Reference
 
 This page provides documentation for our command line tools.
