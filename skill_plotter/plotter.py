@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 from matplotlib import patheffects
 from matplotlib.axes import Axes
 from matplotlib.patches import FancyBboxPatch
-from typing import Union, Optional
-
 
 from .preparator import split_dict_evenly
 from .utils import StyleTypes
@@ -12,7 +10,7 @@ DARK_GRAY = "#404040"
 BLUE = "#367DA2"
 WHITE = "#ffffff"
 
-_COLOR = Union[str, tuple[float, float, float]]
+_COLOR = str | tuple[float, float, float]
 
 
 def generate_diagram(
@@ -23,12 +21,13 @@ def generate_diagram(
     background_color: _COLOR = DARK_GRAY,
     bar_color: _COLOR = DARK_GRAY,
     font_color: _COLOR = BLUE,
-    canvas_color: Optional[_COLOR] = None,
+    canvas_color: _COLOR | None = None,
     style: list[StyleTypes] = [],
 ):
-    """plot and styles the diagram.
+    """Plot and styles the diagram.
 
     Args:
+    ----
         ax (axis): axis to plot on.
         skills (dict): Dictionary with the skills and the values.
         bar_height (float): Percentage of the height of the skill bar.
@@ -36,6 +35,9 @@ def generate_diagram(
         background_color (color): Color of the background.
         bar_color (color): Color of the skill bar.
         font_color (color): Color of the font.
+        canvas_color (color): Color of the canvas.
+        style (list[StyleTypes]): List of styles to apply.
+
     """
     label = list(skills.keys())
     skill_level = list(skills.values())
@@ -51,14 +53,20 @@ def generate_diagram(
 
     n_positions = range(len(skills))
     # plots the skill label
-    ax.barh(n_positions, skill_level, tick_label=label, zorder=3,
-            height=bar_height, left=border_width, facecolor=bar_color)
+    ax.barh(
+        n_positions, skill_level, tick_label=label, zorder=3, height=bar_height, left=border_width, facecolor=bar_color
+    )
     # adds outline if there is one in the style
     if StyleTypes.OUTLINE in style:
         filler_color = WHITE if canvas_color is None else canvas_color
         ax.barh(
-            n_positions, outline_filler, tick_label=label, zorder=2,
-            height=bar_height, color=filler_color, left=border_width
+            n_positions,
+            outline_filler,
+            tick_label=label,
+            zorder=2,
+            height=bar_height,
+            color=filler_color,
+            left=border_width,
         )
     # plots the background
     ax.barh(n_positions, filler, tick_label=label, zorder=1, height=background_height, color=background_color)
@@ -93,12 +101,13 @@ def generate_skill_picture(
     background_color: _COLOR = DARK_GRAY,
     bar_color: _COLOR = DARK_GRAY,
     font_color: _COLOR = BLUE,
-    canvas_color: Optional[_COLOR] = None,
+    canvas_color: _COLOR | None = None,
     style: list[StyleTypes] = [],
 ):
     """Generate a bar diagram for the given skills.
 
     Args:
+    ----
         skills (dict): Skills to plot.
         n_splits (int): Number of columns to split the skills into.
         save_name (str): Name of the file to save.
@@ -108,6 +117,9 @@ def generate_skill_picture(
         background_color (_COLOR, optional): Color for the background. Defaults to DARK_GRAY.
         bar_color (_COLOR, optional): Color for the bar. Defaults to DARK_GRAY.
         font_color (_COLOR, optional): Color for the font. Defaults to BLUE.
+        canvas_color (_COLOR, optional): Color for the canvas. Defaults to None.
+        style (list[StyleTypes], optional): List of styles to apply. Defaults to [].
+
     """
     split_skills = split_dict_evenly(skills, n_splits)
     split_len = len(split_skills[0])
@@ -116,7 +128,7 @@ def generate_skill_picture(
     if StyleTypes.XKCD in style:
         plt.xkcd()
         # reset that white outline
-        plt.rcParams['path.effects'] = [patheffects.withStroke(linewidth=0)]
+        plt.rcParams["path.effects"] = [patheffects.withStroke(linewidth=0)]
 
     # generate the diagram, splits the values into two lists to plot.
     # this should be done in the future over one loop
@@ -130,8 +142,7 @@ def generate_skill_picture(
 
     for ax, skills in zip(axes, split_skills):
         generate_diagram(
-            ax, skills, bar_height, background_height, background_color,
-            bar_color, font_color, canvas_color, style
+            ax, skills, bar_height, background_height, background_color, bar_color, font_color, canvas_color, style
         )
         # need also to set face color of each axis
         if canvas_color is not None:
@@ -155,6 +166,7 @@ def _apply_styles(
     style: list[StyleTypes],
 ):
     """Apply the given styles to the plot.
+
     Some of the settings may not applied before the plot,
     because they are in need of transformation of the plot.
     """
@@ -164,7 +176,7 @@ def _apply_styles(
 
 
 def _round_plot(axes: list[Axes]):
-    """Round the edges of the bars"""
+    """Round the edges of the bars."""
     for ax in axes:
         new_patches = []
         for patch in reversed(ax.patches):
@@ -176,10 +188,12 @@ def _round_plot(axes: list[Axes]):
                 continue
             p_bbox = FancyBboxPatch(
                 (bb.xmin, bb.ymin),
-                abs(bb.width), abs(bb.height),
+                abs(bb.width),
+                abs(bb.height),
                 boxstyle=f"round,pad=-0.0001,rounding_size={0.5*bb.height}",
-                ec="none", fc=color,
-                mutation_aspect=1
+                ec="none",
+                fc=color,
+                mutation_aspect=1,
             )
             patch.remove()
             new_patches.append(p_bbox)
@@ -189,7 +203,7 @@ def _round_plot(axes: list[Axes]):
 
 
 def _clean_empty_bars(axes: list[Axes]):
-    """Set facecolor to none is the bar len is zero"""
+    """Set facecolor to none is the bar len is zero."""
     for ax in axes:
         for patch in ax.patches:
             bb = patch.get_bbox()  # type: ignore

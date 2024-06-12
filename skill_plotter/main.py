@@ -1,14 +1,14 @@
 # pylint: disable=unused-argument
 
-from typing import Optional, Annotated
 from pathlib import Path
+from typing import Annotated
 
 import typer
 
-from .utils import StyleTypes, version_callback, PictureTypes
-from .preparator import DEFAULT_SKILL_FILE_NAME
-from .plotter import generate_skill_picture, BLUE, DARK_GRAY
 from . import preparator
+from .plotter import BLUE, DARK_GRAY, generate_skill_picture
+from .preparator import DEFAULT_SKILL_FILE_NAME
+from .utils import PictureTypes, StyleTypes, version_callback
 
 app = typer.Typer()
 
@@ -33,12 +33,12 @@ def main(
     bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar")] = BLUE,
     background_color: Annotated[str, typer.Option("--bg-color", help="Color of the bars background")] = DARK_GRAY,
     font_color: Annotated[str, typer.Option("--font-color", help="Color of the font")] = DARK_GRAY,
-    canvas_color: Annotated[Optional[str], typer.Option(help="Color behind the plot")] = None,
-    style: Annotated[Optional[list[StyleTypes]], typer.Option("--style", "-s", help="Style of the plot")] = None,
-    version: Annotated[Optional[bool], typer.Option("--version", "-V", callback=version_callback)] = None,
+    canvas_color: Annotated[str | None, typer.Option(help="Color behind the plot")] = None,
+    style: Annotated[list[StyleTypes] | None, typer.Option("--style", "-s", help="Style of the plot")] = None,
+    version: Annotated[bool | None, typer.Option("--version", "-V", callback=version_callback)] = None,
 ):
-    """
-    Plots the set skills to a svg file.
+    """Plot the set skills to a svg file.
+
     Can also be used to manage, edit and delete skills.
     You can also define different skill groups, which are handled separately.
     Different categories help you to group your skills into blocks within the same plot.
@@ -76,8 +76,8 @@ def add(
     category: Annotated[str, typer.Option("--category", "-c", help="Category, used to group by")] = "default",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
-    """
-    Adds the skill to the skill list.
+    """Add the skill to the skill list.
+
     If it already exists, the data will be overwritten.
     """
     preparator.add_skill(skill, level, category, skill_group)
@@ -90,10 +90,10 @@ def add(
 @app.command()
 def interactive_add(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
-    category: Annotated[Optional[str], typer.Option("--category", "-c", help="Always use this category")] = None,
+    category: Annotated[str | None, typer.Option("--category", "-c", help="Always use this category")] = None,
 ):
-    """
-    Interactively add skills to the skill list.
+    """Interactively add skills to the skill list.
+
     If they already exist, the data will be overwritten.
     If skill group is not given, the default skill group will be used.
     If category is not given, the category will prompted for each skill.
@@ -106,9 +106,7 @@ def interactive_add(
 
 @app.command()
 def list_groups():
-    """
-    Show all existing groups.
-    """
+    """Show all existing groups."""
     preparator.list_all_groups()
 
 
@@ -116,9 +114,7 @@ def list_groups():
 def list_skills(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
-    """
-    Show all skills of given group.
-    """
+    """Show all skills of given group."""
     preparator.list_all_skills(skill_group)
 
 
@@ -130,9 +126,7 @@ def remove(
     skill: Annotated[str, typer.Argument(help="Name of the skill to remove")],
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
-    """
-    Removes the skill from the skill list.
-    """
+    """Remove the skill from the skill list."""
     preparator.remove_skill(skill, skill_group)
 
 
@@ -140,8 +134,8 @@ def remove(
 def interactive_remove(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
-    """
-    Interactively remove skills from the skill list.
+    """Interactively remove skills from the skill list.
+
     If skill group is not given, the default skill group will be used.
     """
     preparator.interactive_remove(skill_group)
@@ -151,9 +145,7 @@ def interactive_remove(
 def delete_group(
     group: Annotated[str, typer.Argument(help="Name of group to delete")],
 ):
-    """
-    Delete a group.
-    """
+    """Delete a group."""
     preparator.delete_group(group)
 
 
@@ -162,8 +154,8 @@ def export_skills(
     export_name: Annotated[str, typer.Argument(help="Name of the file to export to")],
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
-    """
-    Export the skill list to a file.
+    """Export the skill list to a file.
+
     If skill group is not given, the default skill group will be used.
     """
     preparator.export_skills_to_file(export_name, skill_group)
@@ -177,8 +169,8 @@ def import_skills(
         bool, typer.Option("--overwrite", "-o", help="Overwrite data if group already exists, merge otherwise")
     ] = False,
 ):
-    """
-    Import skills from a file to a given group.
+    """Import skills from a file to a given group.
+
     If skill group is not given, the default skill group will be used.
     """
     preparator.import_skills_from_file(file, skill_group, overwrite)
