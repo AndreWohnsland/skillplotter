@@ -16,16 +16,16 @@ skill-plotter = "skill_plotter.main:app"
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.9"
-matplotlib = "^3.8.2"
+matplotlib = "^3.9.0"
 typer = { extras = ["all"], version = "^0.9.0" }
-pandas = "^2.2.0"
-jsonschema = "^4.21.1"
+pandas = "^2.2.2"
+jsonschema = "^4.22.0"
 
 
 [tool.poetry.group.dev.dependencies]
-mkdocs = "^1.5.3"
-jupyterlab = "^4.0.11"
-mkdocs-material = "^9.5.5"
+mkdocs = "^1.6.0"
+jupyterlab = "^4.2.2"
+mkdocs-material = "^9.5.26"
 ruff = "^0.4.8"
 mypy = "^1.10.0"
 
@@ -34,7 +34,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 line-length = 120
 
 [tool.ruff.lint]
