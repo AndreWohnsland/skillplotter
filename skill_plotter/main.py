@@ -1,7 +1,7 @@
 # pylint: disable=unused-argument
 
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Optional
 
 import typer
 
@@ -33,9 +33,9 @@ def main(
     bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar")] = BLUE,
     background_color: Annotated[str, typer.Option("--bg-color", help="Color of the bars background")] = DARK_GRAY,
     font_color: Annotated[str, typer.Option("--font-color", help="Color of the font")] = DARK_GRAY,
-    canvas_color: Annotated[str | None, typer.Option(help="Color behind the plot")] = None,
-    style: Annotated[list[StyleTypes] | None, typer.Option("--style", "-s", help="Style of the plot")] = None,
-    version: Annotated[bool | None, typer.Option("--version", "-V", callback=version_callback)] = None,
+    canvas_color: Annotated[Optional[str], typer.Option(help="Color behind the plot")] = None,
+    style: Annotated[Optional[list[StyleTypes]], typer.Option("--style", "-s", help="Style of the plot")] = None,
+    version: Annotated[Optional[bool], typer.Option("--version", "-V", callback=version_callback)] = None,
 ):
     """Plot the set skills to a svg file.
 
@@ -90,7 +90,7 @@ def add(
 @app.command()
 def interactive_add(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
-    category: Annotated[str | None, typer.Option("--category", "-c", help="Always use this category")] = None,
+    category: Annotated[Optional[str], typer.Option("--category", "-c", help="Always use this category")] = None,
 ):
     """Interactively add skills to the skill list.
 
