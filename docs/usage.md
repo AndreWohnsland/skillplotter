@@ -39,7 +39,7 @@ This will add the skill `Python` with the level `9` to the skill group `group1`.
 
 ### Adding, Using Categories
 
-If you want to group multiple skills together, you can also provide the category option, using the `--category` or short `-c` option:
+If you want to group multiple skills together, you can also provide the category option, using the `--category` option:
 
 ```bash
 skill-plotter add Python 9 -c programming -g group1
