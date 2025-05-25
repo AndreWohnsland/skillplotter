@@ -58,7 +58,7 @@ def split_dict_evenly(d: dict, n: int) -> list[dict]:
         splitted.append(dict(items[start:end]))
         start = end
     # append empty element if it is not evenly splitted
-    max_len = len(splitted[0])
+    max_len = len(splitted[0]) if splitted else 0
     for item in splitted:
         if len(item) < max_len:
             item[""] = 0
