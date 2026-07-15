@@ -2,17 +2,13 @@ import json
 from pathlib import Path
 from typing import Any
 
-import click
 import jsonschema
 import typer
 
 from .utils import failure_print, info_print, success_print
 
 _APP_NAME = "skill-plotter"
-_app_dir = typer.get_app_dir(_APP_NAME)
-# if the dir does not exist, create it
-if not Path(_app_dir).exists():
-    Path(_app_dir).mkdir(parents=True)
+_app_dir = Path(typer.get_app_dir(_APP_NAME))
 DEFAULT_SKILL_FILE_NAME = "skills"
 _DEFAULT_CATEGORY = "default"
 
@@ -26,7 +22,10 @@ def _validate_data(data: dict):
         "patternProperties": {
             ".*": {
                 "type": "object",
-                "properties": {"level": {"type": "number"}, "category": {"type": "string"}},
+                "properties": {
+                    "level": {"type": "number", "exclusiveMinimum": 0, "maximum": 10},
+                    "category": {"type": "string"},
+                },
                 "required": ["level", "category"],
             }
         },
@@ -41,7 +40,7 @@ def _validate_data(data: dict):
 
 def _get_target_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> Path:
     """Return the target file path."""
-    return Path(_app_dir) / f"{file_name}.json"
+    return _app_dir / f"{file_name}.json"
 
 
 def split_dict_evenly(d: dict, n: int) -> list[dict]:
@@ -93,16 +92,35 @@ def read_file(file_name: str = DEFAULT_SKILL_FILE_NAME) -> dict[str, dict[str, A
     if not skill_file.exists():
         return {}
     with open(skill_file, encoding="utf-8") as json_file:
-        return json.load(json_file)
+        try:
+            data = json.load(json_file)
+        except json.JSONDecodeError:
+            failure_print(f"Cannot read group {file_name}: {skill_file} is not valid JSON")
+            raise typer.Exit(1) from None
+    if not _validate_data(data):
+        failure_print(f"Cannot read group {file_name}: {skill_file} does not have the correct skill format")
+        raise typer.Exit(1)
+    return data
 
 
 def write_file(data: dict, file_name: str = DEFAULT_SKILL_FILE_NAME) -> None:
     """Write the given dict to the file path."""
     skill_file = _get_target_file(file_name)
-    if not skill_file.exists():
-        skill_file.touch()
-    with open(skill_file, "w", encoding="utf-8") as json_file:
+    skill_file.parent.mkdir(parents=True, exist_ok=True)
+    # write to a temp file first, then atomically swap it in, so a crash
+    # mid-write can never truncate the existing skill data
+    tmp_file = skill_file.with_suffix(".json.tmp")
+    with open(tmp_file, "w", encoding="utf-8") as json_file:
         json.dump(data, json_file)
+    tmp_file.replace(skill_file)
+
+
+_LEVEL_RULE = "Level must be greater than 0 and at most 10"
+
+
+def _valid_level(level: float) -> bool:
+    """Check if the level is within the allowed range."""
+    return 0 < level <= 10
 
 
 def add_skill(skill: str, level: float, category: str = _DEFAULT_CATEGORY, file_name: str = DEFAULT_SKILL_FILE_NAME):
@@ -110,6 +128,9 @@ def add_skill(skill: str, level: float, category: str = _DEFAULT_CATEGORY, file_
 
     If it already exists, the level will be overwritten.
     """
+    if not _valid_level(level):
+        failure_print(_LEVEL_RULE)
+        raise typer.Exit(1)
     data = read_file(file_name)
     data[skill] = {"level": level, "category": category}
     write_file(data, file_name)
@@ -126,18 +147,13 @@ def interactive_add_skill(
         info_print(f"Using category {used_category}")
     while True:
         skill = typer.prompt("Enter skill name")
-        level = 0
-        while level <= 0 or level > 10:
-            level = typer.prompt("Enter level [0-10]", type=float)
-            if level <= 0 or level > 10:
-                failure_print("Level must be between 0 and 10 and not 0")
+        while not _valid_level(level := typer.prompt("Enter level (0-10]", type=float)):
+            failure_print(_LEVEL_RULE)
         category = typer.prompt("Enter category", default=_DEFAULT_CATEGORY) if used_category is None else used_category
         # this should usually not be happening, but just in case
         if not category:
             category = _DEFAULT_CATEGORY
         add_skill(skill, level, category, file_name)
-        # need to reset category!
-        category = None
 
 
 def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
@@ -149,6 +165,7 @@ def remove_skill(skill: str, file_name: str = DEFAULT_SKILL_FILE_NAME):
         success_print(f"Removed skill {skill}")
     else:
         failure_print(f"Skill {skill} not found")
+        raise typer.Exit(1)
 
 
 def interactive_remove(file_name: str = DEFAULT_SKILL_FILE_NAME):
@@ -158,9 +175,13 @@ def interactive_remove(file_name: str = DEFAULT_SKILL_FILE_NAME):
     data = read_file(file_name)
     available_skills = list(data.keys())
     while True:
-        skill = typer.prompt("Enter skill name", show_choices=False, type=click.Choice(available_skills))
+        while (skill := typer.prompt("Enter skill name")) not in available_skills:
+            failure_print(f"Skill {skill} not found")
         remove_skill(skill, file_name)
         available_skills.remove(skill)
+        if not available_skills:
+            info_print("All skills removed, exiting")
+            break
 
 
 def delete_group(group: str):
@@ -175,6 +196,7 @@ def delete_group(group: str):
     else:
         failure_print(f"Group {group} not found")
         list_all_groups()
+        raise typer.Exit(1)
 
 
 def list_all_groups():
@@ -196,7 +218,7 @@ def list_all_skills(group: str):
     if len(data) == 0:
         failure_print(f"No skills found in group {group}, it probably does not exist!")
         list_all_groups()
-        return
+        raise typer.Exit(1)
     data = sort_skills_by_category(data)
     # create template to show data in a table, start at the end
     # and use padding to align the values like a table
@@ -217,7 +239,7 @@ def export_skills_to_file(export_name: str, skill_group: str):
     if not file_to_export.exists():
         failure_print(f"Group {skill_group} does not exist, only those are valid:")
         list_all_groups()
-        return
+        raise typer.Exit(1)
     target_file = Path(f"{export_name}.json")
     target_file.write_bytes(file_to_export.read_bytes())
     success_print(f"Exported skills in group {skill_group} to file {target_file.absolute()}")
@@ -228,17 +250,17 @@ def import_skills_from_file(import_file: Path, skill_group: str, overwrite: bool
     # check if import file is valid (exists and is json file)
     if not import_file.exists():
         failure_print(f"Import file {import_file} does not exist")
-        return
+        raise typer.Exit(1)
     if import_file.suffix != ".json":
         failure_print(f"Import file {import_file} is not a JSON file")
-        return
+        raise typer.Exit(1)
 
     with open(import_file, encoding="utf-8") as json_file:
         import_data = json.load(json_file)
 
     if not _validate_data(import_data):
         failure_print(f"Import file {import_file} does not have the correct format, check if it is a valid skill file")
-        return
+        raise typer.Exit(1)
 
     # in case of overwrite, just overwrite the data
     existing_data = read_file(skill_group)

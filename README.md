@@ -2,7 +2,7 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/AndreWohnsland/skillplotter)
 [![PyPI - Version](https://img.shields.io/pypi/v/skill-plotter)](https://pypi.org/project/skill-plotter/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/skill-plotter)
-![Python Version](https://img.shields.io/badge/python-%3E%3D%203.9-blue)
+![Python Version](https://img.shields.io/pypi/pyversions/skill-plotter)
 ![GitHub](https://img.shields.io/github/license/AndreWohnsland/skillplotter)
 ![GitHub issues](https://img.shields.io/github/issues-raw/AndreWohnsland/skillplotter)
 [![Documentation Status](https://readthedocs.org/projects/skillplotter/badge/?version=latest)](https://skillplotter.readthedocs.io)
@@ -50,8 +50,8 @@ If you want to have a complete walkthrough, you can have a look at the [usage do
 ### Minimal Requirements
 
 ```
-- Python 3.9
-- matplotlib 3.8
+- Python 3.11
+- matplotlib 3.11
 ```
 
 ## Examples

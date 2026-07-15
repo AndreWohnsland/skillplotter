@@ -1,0 +1,61 @@
+[project]
+site_name = "Skill Plotter"
+site_description = "Generate skill plots for your CV"
+site_author = "Andre Wohnsland"
+copyright = "&copy; Copyright 2026, Andre Wohnsland & contributors"
+repo_url = "https://github.com/AndreWohnsland/skillplotter"
+repo_name = "GitHub skill-plotter"
+
+nav = [
+  { "Home" = "index.md" },
+  { "Usage" = "usage.md" },
+  { "Development" = "development.md" },
+]
+
+extra_css = ["css/extra.css"]
+
+[project.theme]
+variant = "modern"
+custom_dir = "docs/overrides"
+logo = "img/skillplotter.svg"
+favicon = "img/favicon.ico"
+features = [
+  "navigation.footer",
+  "content.code.copy",
+  "content.code.annotate",
+  "announce.dismiss",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "teal"
+accent = "teal"
+toggle.icon = "material/weather-sunny"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "teal"
+accent = "teal"
+toggle.icon = "material/weather-night"
+toggle.name = "Switch to light mode"
+
+# Customizing an extension (toc permalink) disables zensical's defaults,
+# so all used extensions must be listed explicitly:
+# https://zensical.org/docs/setup/extensions/#default-configuration-zensicaltoml
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions.toc]
+permalink = "#"
+[project.markdown_extensions.pymdownx.details]
+[project.markdown_extensions.pymdownx.emoji]
+emoji_index = "zensical.extensions.emoji.twemoji"
+emoji_generator = "zensical.extensions.emoji.to_svg"
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.snippets]
+[project.markdown_extensions.pymdownx.superfences]

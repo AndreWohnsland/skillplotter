@@ -1,14 +1,12 @@
-# pylint: disable=unused-argument
-
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 
 from . import preparator
 from .plotter import BLUE, DARK_GRAY, generate_skill_picture
 from .preparator import DEFAULT_SKILL_FILE_NAME
-from .utils import PictureTypes, StyleTypes, version_callback
+from .utils import PictureTypes, StyleTypes, failure_print, version_callback
 
 app = typer.Typer()
 
@@ -33,9 +31,9 @@ def main(
     bar_color: Annotated[str, typer.Option("--bar-color", help="Color of the bar")] = BLUE,
     background_color: Annotated[str, typer.Option("--bg-color", help="Color of the bars background")] = DARK_GRAY,
     font_color: Annotated[str, typer.Option("--font-color", help="Color of the font")] = DARK_GRAY,
-    canvas_color: Annotated[Optional[str], typer.Option(help="Color behind the plot")] = None,
-    style: Annotated[Optional[list[StyleTypes]], typer.Option("--style", "-s", help="Style of the plot")] = None,
-    version: Annotated[Optional[bool], typer.Option("--version", "-V", callback=version_callback)] = None,
+    canvas_color: Annotated[str | None, typer.Option(help="Color behind the plot")] = None,
+    style: Annotated[list[StyleTypes] | None, typer.Option("--style", "-s", help="Style of the plot")] = None,
+    version: Annotated[bool | None, typer.Option("--version", "-V", callback=version_callback)] = None,
 ):
     """Plot the set skills to a svg file.
 
@@ -51,6 +49,10 @@ def main(
     typer.echo(f"Using <{skill_group}> skill group, styles: <{style_string}>")
     typer.echo(f"Plotting skills to <{save_name}.{file_type}>")
     data = preparator.read_file(skill_group)
+    if not data:
+        failure_print(f"No skills found in group {skill_group}, it probably does not exist!")
+        preparator.list_all_groups()
+        raise typer.Exit(1)
     if group_categories:
         data = preparator.sort_skills_by_category(data)
     plot_data = preparator.reduce_data(data)
@@ -72,7 +74,7 @@ def main(
 @app.command()
 def add(
     skill: Annotated[str, typer.Argument(help="Name of the skill to add")],
-    level: Annotated[float, typer.Argument(help="Level of the skill, between 0 and 10", min=0, max=10)],
+    level: Annotated[float, typer.Argument(help="Level of the skill, greater than 0 and at most 10")],
     category: Annotated[str, typer.Option("--category", "-c", help="Category, used to group by")] = "default",
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
 ):
@@ -90,7 +92,7 @@ def add(
 @app.command()
 def interactive_add(
     skill_group: _SKILL_GROUP_ARG = DEFAULT_SKILL_FILE_NAME,
-    category: Annotated[Optional[str], typer.Option("--category", "-c", help="Always use this category")] = None,
+    category: Annotated[str | None, typer.Option("--category", "-c", help="Always use this category")] = None,
 ):
     """Interactively add skills to the skill list.
 
