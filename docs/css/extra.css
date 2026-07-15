@@ -6,8 +6,10 @@
 #announcement-content {
   text-align: center;
   background-color: #f07e1a;
+  color: #fff; /* modern banner text is theme-dependent; keep it white on the orange */
 }
 
 .md-banner {
   background-color: #f07e1a;
+  color: #fff;
 }

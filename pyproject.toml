@@ -1,44 +1,67 @@
-[tool.poetry]
+[project]
 name = "skill-plotter"
 version = "0.4.2"
 description = "CLI tool to generate a plot of your skills"
-authors = ["Andre Wohnsland <50302161+AndreWohnsland@users.noreply.github.com>"]
-license = "MIT"
+authors = [{ name = "Andre Wohnsland", email = "50302161+AndreWohnsland@users.noreply.github.com" }]
+requires-python = ">=3.11"
 readme = "README.md"
-packages = [{ include = "skill_plotter" }]
-keywords = ["skill", "plot", "cli", "tool", "cv", "resume"]
-homepage = "https://skillplotter.readthedocs.io/"
-documentation = "https://skillplotter.readthedocs.io"
-repository = "https://github.com/AndreWohnsland/skillplotter"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+    "skill",
+    "plot",
+    "cli",
+    "tool",
+    "cv",
+    "resume",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "matplotlib>=3.11.0,<4",
+    "typer>=0.26.8",
+    "jsonschema>=4.26.0,<5",
+]
 
-[tool.poetry.scripts]
+[project.urls]
+Homepage = "https://skillplotter.readthedocs.io/"
+Repository = "https://github.com/AndreWohnsland/skillplotter"
+Documentation = "https://skillplotter.readthedocs.io"
+
+[project.scripts]
 skill-plotter = "skill_plotter.main:app"
 
-[tool.poetry.dependencies]
-python = "<3.13,>=3.10"
-matplotlib = "^3.10.3"
-typer = {extras = ["all"], version = "^0.15.2"}
-pandas = "^2.2.3"
-jsonschema = "^4.23.0"
+[dependency-groups]
+dev = [
+    "zensical>=0.0.47",
+    "jupyterlab>=4.4.2",
+    "ruff>=0.15.21",
+    "ty>=0.0.59",
+]
 
+[tool.uv]
+default-groups = "all"
 
-[tool.poetry.group.dev.dependencies]
-mkdocs = "^1.6.1"
-jupyterlab = "^4.4.2"
-mkdocs-material = "^9.6.14"
-ruff = "^0.11.2"
-mypy = "^1.15.0"
+[tool.uv.build-backend]
+module-name = ["skill_plotter"]
+module-root = ""
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.5,<0.10.0"]
+build-backend = "uv_build"
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py311"
 line-length = 120
 
 [tool.ruff.lint]
 select = [
+  "B", # flake8-bugbear
   "C", # Convention
   "D", # pydocstyle 
   "E", # pycodestyle
@@ -61,7 +84,3 @@ ignore = [
   "D203", # 1 blank line required before class docstring
   "D213", # Multi-line docstring summary should start at the second line
 ]
-per-file-ignores = {"main.py" = ["UP007"]} # Annotated does not support | None for optional
-
-[tool.mypy]
-disable_error_code = ["annotation-unchecked", "import-untyped"]

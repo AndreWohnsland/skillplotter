@@ -1,15 +1,14 @@
 # Required
 version: 2
 
-# Set the version of Python and other tools you might need
+# Zensical has no native RTD integration (like the mkdocs key),
+# so build the site manually and move it to the RTD output folder
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
-    python: '3.11'
-
-mkdocs:
-  configuration: mkdocs.yml
-# Optionally declare the Python requirements required to build your docs
-python:
-  install:
-    - requirements: docs/requirements.txt
+    python: '3.12'
+  commands:
+    - pip install -r docs/requirements.txt
+    - zensical build
+    - mkdir -p $READTHEDOCS_OUTPUT
+    - mv site $READTHEDOCS_OUTPUT/html

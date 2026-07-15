@@ -22,7 +22,7 @@ def generate_diagram(
     bar_color: _COLOR = DARK_GRAY,
     font_color: _COLOR = BLUE,
     canvas_color: _COLOR | None = None,
-    style: list[StyleTypes] = [],
+    style: list[StyleTypes] | None = None,
 ):
     """Plot and styles the diagram.
 
@@ -39,6 +39,7 @@ def generate_diagram(
         style (list[StyleTypes]): List of styles to apply.
 
     """
+    style = style or []
     label = list(skills.keys())
     skill_level = list(skills.values())
     border_height = max((background_height - bar_height) / 2, 0)
@@ -102,7 +103,7 @@ def generate_skill_picture(
     bar_color: _COLOR = DARK_GRAY,
     font_color: _COLOR = BLUE,
     canvas_color: _COLOR | None = None,
-    style: list[StyleTypes] = [],
+    style: list[StyleTypes] | None = None,
 ):
     """Generate a bar diagram for the given skills.
 
@@ -121,6 +122,7 @@ def generate_skill_picture(
         style (list[StyleTypes], optional): List of styles to apply. Defaults to [].
 
     """
+    style = style or []
     split_skills = split_dict_evenly(skills, n_splits)
     split_len = len(split_skills[0])
 
@@ -140,9 +142,9 @@ def generate_skill_picture(
     if isinstance(axes, Axes):
         axes = [axes]
 
-    for ax, skills in zip(axes, split_skills):
+    for ax, skill_chunk in zip(axes, split_skills, strict=True):
         generate_diagram(
-            ax, skills, bar_height, background_height, background_color, bar_color, font_color, canvas_color, style
+            ax, skill_chunk, bar_height, background_height, background_color, bar_color, font_color, canvas_color, style
         )
         # need also to set face color of each axis
         if canvas_color is not None:
@@ -180,9 +182,8 @@ def _round_plot(axes: list[Axes]):
     for ax in axes:
         new_patches = []
         for patch in reversed(ax.patches):
-            # print(bb.xmin, bb.ymin,abs(bb.width), abs(bb.height))
             bb = patch.get_bbox()  # type: ignore
-            color = patch.get_facecolor()  # type: ignore
+            color = patch.get_facecolor()
             # skip for elements if they are just placeholder
             if bb.width == 0:
                 continue
@@ -208,4 +209,4 @@ def _clean_empty_bars(axes: list[Axes]):
         for patch in ax.patches:
             bb = patch.get_bbox()  # type: ignore
             if bb.width == 0:
-                patch.set_facecolor("none")  # type: ignore
+                patch.set_facecolor("none")

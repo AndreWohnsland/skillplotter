@@ -1,13 +1,13 @@
 """Module for utility functions and constants."""
 
-from enum import Enum
+from enum import StrEnum
 
 import typer
 
 from . import __version__
 
 
-class PictureTypes(str, Enum):
+class PictureTypes(StrEnum):
     """Save file types."""
 
     SVG = "svg"
@@ -16,7 +16,7 @@ class PictureTypes(str, Enum):
     PDF = "pdf"
 
 
-class StyleTypes(str, Enum):
+class StyleTypes(StrEnum):
     """Different types of styling for the plot."""
 
     OUTLINE = "outline"
@@ -33,7 +33,7 @@ def version_callback(value: bool):
         raise typer.Exit()
 
 
-def c_print(text: str, color: str = typer.colors.WHITE):
+def c_print(text: str, color: str):
     """Print the given text in the given color."""
     typer.echo(typer.style(text, fg=color))
 

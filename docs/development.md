@@ -1,3 +1,7 @@
+---
+icon: material/source-branch
+---
+
 # Development
 
 This package is under active maintenance, if you spot a bug, feel free to [open an issue](https://github.com/AndreWohnsland/skillplotter/issues/new/choose).

@@ -1,3 +1,7 @@
+---
+icon: material/rocket-launch-outline
+---
+
 # Usage
 
 In this section, you will get a brief introduction to the usage of the package.
@@ -253,10 +257,3 @@ Simply provide the path to the file and the skill group you want to import to.
 You can also use the overwrite option `-o` to ignore and overwrite data if the group already exists.
 Otherwise the data will be merged, imported skills take precedence.
 
-<!-- # CLI Reference
-
-This page provides documentation for our command line tools.
-
-::: mkdocs-click
-    :module: skill_plotter.main
-    :command: app -->

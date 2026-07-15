@@ -14,11 +14,21 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Publish PyPi package
-        uses: code-specialist/pypi-poetry-publish@v1
+      - uses: actions/checkout@v4
         with:
-          POETRY_VERSION: '1.5.0'
-          POETRY_CORE_VERSION: '1.6.0'
-          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGE_DIRECTORY: './skill_plotter/'
-          PUBLISH_REGISTRY_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          ref: master
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Set GitHub tag as package version
+        run: uv version ${{ github.event.release.tag_name }}
+      - name: Commit and push version
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add pyproject.toml uv.lock
+          git commit -m 'Change version to ${{ github.event.release.tag_name }}' --allow-empty
+          git push origin HEAD:master
+      - name: Build and publish
+        run: |
+          uv build
+          uv publish --token ${{ secrets.PYPI_TOKEN }}
