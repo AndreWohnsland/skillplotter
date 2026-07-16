@@ -237,20 +237,20 @@ With the CLI, you can also transfer data from one skill group to another, or sav
 
 ### Exporting Data
 
-You can use the `export` command to save your data to a file:
+You can use the `export-skills` command to save your data to a file:
 
 ```bash
-skill-plotter export -g group1 export_file
+skill-plotter export-skills export_file -g group1
 ```
 
 As with the other commands, you can choose the skill group you want to export.
 
 ### Importing Data
 
-You can use the `import` command to load your data from a file:
+You can use the `import-skills` command to load your data from a file:
 
 ```bash
-skill-plotter import -g group1 ./import_file.json
+skill-plotter import-skills ./import_file.json -g group1
 ```
 
 Simply provide the path to the file and the skill group you want to import to.

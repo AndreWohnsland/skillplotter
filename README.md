@@ -31,7 +31,7 @@ Just use the CLI command to run the plotter, the help shows you all possible thi
 
 ```bash
 skill-plotter --help
-# Add a skill
+# Add a skill (optionally with category and skill group)
 skill-plotter add Python 9
 # or use it interactively
 skill-plotter interactive-add
@@ -39,6 +39,12 @@ skill-plotter interactive-add
 skill-plotter remove Python
 # or use it interactively
 skill-plotter interactive-remove
+# Show your groups / skills
+skill-plotter list-groups
+skill-plotter list-skills
+# Export or import skill data
+skill-plotter export-skills my_backup
+skill-plotter import-skills ./my_backup.json
 # Do the plot
 skill-plotter
 ```
