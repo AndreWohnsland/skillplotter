@@ -191,7 +191,7 @@ def _round_plot(axes: list[Axes]):
                 (bb.xmin, bb.ymin),
                 abs(bb.width),
                 abs(bb.height),
-                boxstyle=f"round,pad=-0.0001,rounding_size={0.5*bb.height}",
+                boxstyle=f"round,pad=-0.0001,rounding_size={0.5 * bb.height}",
                 ec="none",
                 fc=color,
                 mutation_aspect=1,
