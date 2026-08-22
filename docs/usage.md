@@ -178,9 +178,9 @@ Some options are:
 - `--font-color`: The color of the font in the plot
 - `--canvas-color`: The color behind the plot
 - `--style` or `-s`: A predefined style, can use multiple
-    - outline: The background bars got no fill but an outline
-    - round: All bars got rounded corners
-    - xkcd: Using the [xkcd style](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xkcd.html), need "Humor Sans" font
+  - outline: The background bars got no fill but an outline
+  - round: All bars got rounded corners
+  - xkcd: Using the [xkcd style](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xkcd.html), need "Humor Sans" font
 
 You can experiment with those values and find the best fit for you.
 I recommend using hex color codes for the colors.
@@ -197,7 +197,7 @@ skill-plotter --bar-height 0.5 --bg-height 0.7 --bar-color "#000000" --bg-color 
     ```python
     from matplotlib import font_manager
 
-    font_dirs = ['path/to/font/']
+    font_dirs = ["path/to/font/"]
     font_files = font_manager.findSystemFonts(fontpaths=font_dirs)
 
     for font_file in font_files:
@@ -205,9 +205,8 @@ skill-plotter --bar-height 0.5 --bg-height 0.7 --bar-color "#000000" --bg-color 
         font_manager.fontManager.addfont(font_file)
 
     # testing if it is registered:
-    font_manager.findfont('Humor Sans') 
+    font_manager.findfont("Humor Sans")
     # >> '....\Humor-Sans.ttf'
-
     ```
     If you are using a virtual environment, make sure to execute the code within that Python.
 
@@ -256,4 +255,3 @@ skill-plotter import-skills ./import_file.json -g group1
 Simply provide the path to the file and the skill group you want to import to.
 You can also use the overwrite option `-o` to ignore and overwrite data if the group already exists.
 Otherwise the data will be merged, imported skills take precedence.
-
