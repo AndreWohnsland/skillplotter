@@ -2,5 +2,23 @@ version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
+    labels:
+      - dependencies
+      - skip-changelog
     schedule:
       interval: monthly
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+  - package-ecosystem: uv
+    directory: /
+    labels:
+      - dependencies
+      - skip-changelog
+    schedule:
+      interval: monthly
+    groups:
+      python:
+        patterns:
+          - "*"
