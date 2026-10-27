@@ -23,8 +23,8 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "matplotlib>=3.11.1,<4",
-    "typer>=0.27.1",
+    "matplotlib>=3.11.2,<4",
+    "typer>=0.27.3",
     "jsonschema>=4.26.0,<5",
 ]
 
@@ -38,10 +38,10 @@ skill-plotter = "skill_plotter.main:app"
 
 [dependency-groups]
 dev = [
-    "zensical>=0.0.57",
-    "jupyterlab>=4.6.3",
-    "ruff>=0.16.4",
-    "ty==0.0.75",
+    "zensical>=0.0.73",
+    "jupyterlab>=4.6.4",
+    "ruff>=0.17.3",
+    "ty==0.0.92",
     "pytest>=9.1.1",
 ]
 
@@ -53,7 +53,7 @@ module-name = ["skill_plotter"]
 module-root = ""
 
 [build-system]
-requires = ["uv_build>=0.9.5,<0.13.0"]
+requires = ["uv_build>=0.13.6,<0.14.0"]
 build-backend = "uv_build"
 
 [tool.ruff]
